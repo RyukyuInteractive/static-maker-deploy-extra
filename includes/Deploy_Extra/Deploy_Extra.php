@@ -61,6 +61,15 @@ class Deploy_Extra
 
         add_submenu_page(
             $slug,
+            __('Deploy List', STATIC_MAKER_DEPLOY_EXTRA),
+            __('Deploy List', STATIC_MAKER_DEPLOY_EXTRA),
+            $cap,
+            $slug . '_deploy_extra_list',
+            [$this, 'display_admin_menu_list']
+        );
+
+        add_submenu_page(
+            $slug,
             __('Deploy Settings', STATIC_MAKER_DEPLOY_EXTRA),
             __('Deploy Settings', STATIC_MAKER_DEPLOY_EXTRA),
             $cap,
@@ -108,6 +117,11 @@ class Deploy_Extra
     public function display_admin_menu_main()
     {
         include_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/views/admin-display-main.php';
+    }
+
+    public function display_admin_menu_list()
+    {
+        include_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/views/admin-display-list.php';
     }
 
     public function display_admin_menu_configure()
