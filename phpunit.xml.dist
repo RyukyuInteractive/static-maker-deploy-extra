@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="vendor/autoload.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	>
+	<testsuites>
+		<!--<testsuite name="wptest">-->
+			<!--<directory prefix="test-" suffix=".php">./tests/</directory>-->
+			<!--<exclude>./tests/test-sample.php</exclude>-->
+		<!--</testsuite>-->
+
+		<testsuite name="smde-unit-tests">
+			<directory prefix="test-" suffix=".php">./tests/unit/</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Static_Maker\\": "includes/"
+        }
+    },
+    "require": {
+        "php-di/php-di": "^6.0"
+    }
+}
