@@ -23,26 +23,26 @@ define('STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_DIFF_TABLE_NAME', get_diff_table_name()
 
 function load_static_maker_deploy_extra_basics($static_maker_class)
 {
-	$container = new DI\Container();
+    $container = new DI\Container();
 
-	$static_maker_class->features['rsync'] = false;
+    $static_maker_class->features['rsync'] = false;
 
-	$smde = $container->get('Static_Maker\Deploy_Extra\Deploy_Extra');
+    $smde = $container->get('Static_Maker\Deploy_Extra\Deploy_Extra');
 
-	add_action('static_maker_loaded', [$smde, 'load']);
+    add_action('static_maker_loaded', [$smde, 'load']);
 
-	add_action('admin_init', [$smde, 'options_update']);
-	add_action('admin_enqueue_scripts', [$smde, 'enqueue_scripts']);
+    add_action('admin_init', [$smde, 'options_update']);
+    add_action('admin_enqueue_scripts', [$smde, 'enqueue_scripts']);
 
-	// cron actions
-	add_action('smde_schedule_handler', [$smde->cron, 'cron_schedule_handler']);
+    // cron actions
+    add_action('smde_schedule_handler', [$smde->cron, 'cron_schedule_handler']);
 
-	// ajax endpoints
-	add_action('wp_ajax_static-maker-deploy-extra-schedule_deploy', [$smde->ajax, 'ajax_schedule_deploy']);
-	add_action('wp_ajax_static-maker-deploy-extra-partial_schedule_deploy', [$smde->ajax, 'ajax_partial_schedule_deploy']);
-	add_action('wp_ajax_static-maker-deploy-extra-unschedule_deploy', [$smde->ajax, 'ajax_unschedule_deploy']);
-	add_action('wp_ajax_static-maker-deploy-extra-ajax_download_production_data', [$smde->ajax, 'ajax_download_production_data']);
-	add_action('wp_ajax_static-maker-deploy-extra-ajax_get_current_diffs', [$smde->ajax, 'ajax_get_current_diffs']);
+    // ajax endpoints
+    add_action('wp_ajax_static-maker-deploy-extra-schedule_deploy', [$smde->ajax, 'ajax_schedule_deploy']);
+    add_action('wp_ajax_static-maker-deploy-extra-partial_schedule_deploy', [$smde->ajax, 'ajax_partial_schedule_deploy']);
+    add_action('wp_ajax_static-maker-deploy-extra-unschedule_deploy', [$smde->ajax, 'ajax_unschedule_deploy']);
+    add_action('wp_ajax_static-maker-deploy-extra-ajax_download_production_data', [$smde->ajax, 'ajax_download_production_data']);
+    add_action('wp_ajax_static-maker-deploy-extra-ajax_get_current_diffs', [$smde->ajax, 'ajax_get_current_diffs']);
 }
 
 add_action('static_maker_before_init', 'load_static_maker_deploy_extra_basics');
@@ -51,12 +51,12 @@ add_action('static_maker_before_init', 'load_static_maker_deploy_extra_basics');
 
 function activate_hook($network_wide)
 {
-	activate_hook_function($network_wide);
+    activate_hook_function($network_wide);
 }
 
 function deactivate_hook($network_wide)
 {
-	deactivate_hook_function($network_wide);
+    deactivate_hook_function($network_wide);
 }
 
 register_activation_hook(__FILE__, 'activate_hook_function');
