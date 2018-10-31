@@ -43,9 +43,12 @@ class Deploy_List_Table extends WP_List_Table
         $hidden = array();
         $sortable = $this->get_sortable_columns();
         $this->_column_headers = array($columns, $hidden, $sortable);
-
         $current_page = $this->get_pagenum();
         $total_items = $this->db->fetch_deploy_list_total_items();
+
+        // sorting
+        $orderby = $_GET['orderby'] ?? 'date';
+        $order = $_GET['order'] ?? 'desc';
 
         $this->set_pagination_args(array(
             'total_items' => $total_items, //WE have to calculate the total number of items
@@ -60,6 +63,8 @@ class Deploy_List_Table extends WP_List_Table
             'total_items' => $total_items,
             'per_page' => $this->per_page,
             'columns' => $columns,
+            'orderby' => $orderby,
+            'order' => $order,
         ]);
     }
 
@@ -113,7 +118,6 @@ class Deploy_List_Table extends WP_List_Table
     public function get_sortable_columns()
     {
         $sortable_columns = array(
-            'id' => ['id', false],
             'date' => ['date', true],
         );
         return $sortable_columns;

@@ -91,19 +91,22 @@ class DB
     {
         global $wpdb;
         $id = $opts['id'];
-        $current_page = $opts['current_page'];
-        $total_items = $opts['total_items'];
-        $per_page = $opts['per_page'];
-        $columns = $opts['columns'];
+        $current_page = $opts['current_page'] ?? 0;
+        $total_items = $opts['total_items'] ?? 0;
+        $per_page = $opts['per_page'] ?? 15;
+        $columns = $opts['columns'] ?? [];
+        $orderby = $opts['orderby'] ?? null;
+        $order = $opts['order'] ?? null;
+
+        $prepare_values = [$id];
 
         $search_queries = [];
-        $search_values = [];
         if (isset($_POST['s']) && $_POST['s'] !== '') {
             $search_string = '%' . $_POST['s'] . '%';
             $search_query = ' WHERE ';
             foreach ($columns as $key => $val) {
                 array_push($search_queries, "$key LIKE \"%s\"");
-                array_push($search_values, $search_string);
+                array_push($prepare_values, $search_string);
             }
         }
 
@@ -115,16 +118,27 @@ class DB
 
         $offset = ($current_page - 1) * $per_page;
         $query .= " LIMIT %d  OFFSET %d";
-        return $wpdb->get_results($wpdb->prepare($query, array_merge([$id], $search_values, [$per_page, $offset])), ARRAY_A);
+        array_push($prepare_values, $per_page, $offset);
+
+        // if the orderby is available, validate orderby is in the columns name
+        if ($orderby && $order && isset($columns[$orderby]) && $this->is_valid_for_order($order)) {
+            $query .= " ORDER BY $orderby $order ";
+        }
+
+        return $wpdb->get_results($wpdb->prepare($query, $prepare_values), ARRAY_A);
     }
 
     public function fetch_deploy_list($opts)
     {
         global $wpdb;
-        $current_page = $opts['current_page'];
-        $total_items = $opts['total_items'];
-        $per_page = $opts['per_page'];
-        $columns = $opts['columns'];
+        $current_page = $opts['current_page'] ?? 0;
+        $total_items = $opts['total_items'] ?? 0;
+        $per_page = $opts['per_page'] ?? 15;
+        $columns = $opts['columns'] ?? [];
+        $orderby = $opts['orderby'] ?? null;
+        $order = $opts['order'] ?? null;
+
+        $prepare_values = [];
 
         $search_queries = [];
         $search_values = [];
@@ -133,19 +147,25 @@ class DB
             $search_query = ' WHERE ';
             foreach ($columns as $key => $val) {
                 array_push($search_queries, "$key LIKE \"%s\"");
-                array_push($search_values, $search_string);
+                array_push($prepare_values, $search_string);
             }
         }
-
-        $offset = ($current_page - 1) * $per_page;
 
         $query = 'SELECT * FROM ' . STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME;
         if ($search_queries) {
             $query .= ' WHERE ' . implode(' OR ', $search_queries);
         }
-        $query .= " LIMIT %d  OFFSET %d";
 
-        $query = $wpdb->prepare($query, array_merge($search_values, [$per_page, $offset]));
+        // if the orderby is available, validate orderby is in the columns name
+        if ($orderby && $order && isset($columns[$orderby]) && $this->is_valid_for_order($order)) {
+            $query .= " ORDER BY $orderby $order ";
+        }
+
+        $query .= " LIMIT %d  OFFSET %d";
+        $offset = ($current_page - 1) * $per_page;
+        array_push($prepare_values, $per_page, $offset);
+
+        $query = $wpdb->prepare($query, $prepare_values);
         return $wpdb->get_results($query, ARRAY_A);
     }
 
@@ -153,5 +173,10 @@ class DB
     {
         global $wpdb;
         return $wpdb->get_var('SELECT COUNT(*) FROM ' . STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME);
+    }
+
+    public function is_valid_for_order($name)
+    {
+        return strtolower($name) === 'asc' || strtolower($name) === 'desc';
     }
 }
