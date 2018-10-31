@@ -3,20 +3,23 @@ namespace Static_Maker\Deploy_Extra;
 
 require_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/includes/class-wp-list-table.php';
 
-class Deploy_List_Table extends WP_List_Table
+class Deploy_Files_List_Table extends WP_List_Table
 {
+    private $deploy_id;
     private $per_page = 15;
     private $db;
 
-    public function __construct(DB $db)
+    public function __construct(DB $db, $id)
     {
         // global $status, $page;
+
+        $this->deploy_id = $id;
         $this->db = $db;
 
         //Set parent defaults
         parent::__construct(array(
-            'singular' => 'deploy list', //singular name of the listed records
-            'plural' => 'deploy lists', //plural name of the listed records
+            'singular' => 'deploy file', //singular name of the listed records
+            'plural' => 'deploy files', //plural name of the listed records
             'ajax' => false, //does this table support ajax?
         ));
 
@@ -25,11 +28,8 @@ class Deploy_List_Table extends WP_List_Table
     public function get_columns()
     {
         $columns = array(
-            'cb' => '<input type="checkbox" />',
-            'id' => 'ID',
-            'date' => 'Date',
-            'type' => 'Type',
-            'status' => 'Status',
+            'file_path' => 'File Path',
+            'action' => 'Action',
         );
         return $columns;
     }
@@ -45,7 +45,8 @@ class Deploy_List_Table extends WP_List_Table
         $this->_column_headers = array($columns, $hidden, $sortable);
 
         $current_page = $this->get_pagenum();
-        $total_items = $this->db->fetch_deploy_list_total_items();
+        // $total_items = $this->db->fetch_deploy_list_total_items();
+        $total_items = 0;
 
         $this->set_pagination_args(array(
             'total_items' => $total_items, //WE have to calculate the total number of items
@@ -53,9 +54,9 @@ class Deploy_List_Table extends WP_List_Table
         ));
 
         $columns = $this->get_columns();
-        unset($columns['cb']);
 
-        $this->items = $this->db->fetch_deploy_list([
+        $this->items = $this->db->fetch_deploy_files([
+            'id' => $this->deploy_id,
             'current_page' => $current_page,
             'total_items' => $total_items,
             'per_page' => $this->per_page,
@@ -65,15 +66,7 @@ class Deploy_List_Table extends WP_List_Table
 
     public function column_default($item, $column_name)
     {
-        switch ($column_name) {
-            case 'id':
-            case 'date':
-            case 'type':
-            case 'status':
-                return $item[$column_name];
-            default:
-                return print_r($item, true); //Show the whole array for troubleshooting purposes
-        }
+        return $item[$column_name];
     }
 
     public function column_cb($item)

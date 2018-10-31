@@ -79,4 +79,79 @@ class DB
         $sql = "SELECT * FROM $this->list_table_name WHERE status = 'waiting' AND timestamp = %s ORDER BY id DESC LIMIT 1";
         return $wpdb->get_row($wpdb->prepare($sql, $timestamp), ARRAY_A);
     }
+
+    public function fetch_deploy($id)
+    {
+        global $wpdb;
+        $sql = "SELECT * FROM $this->list_table_name WHERE id = %d";
+        return $wpdb->get_row($wpdb->prepare($sql, $id), ARRAY_A);
+    }
+
+    public function fetch_deploy_files($opts)
+    {
+        global $wpdb;
+        $id = $opts['id'];
+        $current_page = $opts['current_page'];
+        $total_items = $opts['total_items'];
+        $per_page = $opts['per_page'];
+        $columns = $opts['columns'];
+
+        $search_queries = [];
+        $search_values = [];
+        if (isset($_POST['s']) && $_POST['s'] !== '') {
+            $search_string = '%' . $_POST['s'] . '%';
+            $search_query = ' WHERE ';
+            foreach ($columns as $key => $val) {
+                array_push($search_queries, "$key LIKE \"%s\"");
+                array_push($search_values, $search_string);
+            }
+        }
+
+        $query = "SELECT * FROM $this->diff_table_name WHERE foreign_id = %d";
+
+        if ($search_queries) {
+            $query .= ' AND ' . implode(' OR ', $search_queries);
+        }
+
+        $offset = ($current_page - 1) * $per_page;
+        $query .= " LIMIT %d  OFFSET %d";
+        return $wpdb->get_results($wpdb->prepare($query, array_merge([$id], $search_values, [$per_page, $offset])), ARRAY_A);
+    }
+
+    public function fetch_deploy_list($opts)
+    {
+        global $wpdb;
+        $current_page = $opts['current_page'];
+        $total_items = $opts['total_items'];
+        $per_page = $opts['per_page'];
+        $columns = $opts['columns'];
+
+        $search_queries = [];
+        $search_values = [];
+        if (isset($_POST['s']) && $_POST['s'] !== '') {
+            $search_string = '%' . $_POST['s'] . '%';
+            $search_query = ' WHERE ';
+            foreach ($columns as $key => $val) {
+                array_push($search_queries, "$key LIKE \"%s\"");
+                array_push($search_values, $search_string);
+            }
+        }
+
+        $offset = ($current_page - 1) * $per_page;
+
+        $query = 'SELECT * FROM ' . STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME;
+        if ($search_queries) {
+            $query .= ' WHERE ' . implode(' OR ', $search_queries);
+        }
+        $query .= " LIMIT %d  OFFSET %d";
+
+        $query = $wpdb->prepare($query, array_merge($search_values, [$per_page, $offset]));
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+
+    public function fetch_deploy_list_total_items()
+    {
+        global $wpdb;
+        return $wpdb->get_var('SELECT COUNT(*) FROM ' . STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME);
+    }
 }

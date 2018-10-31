@@ -124,7 +124,11 @@ class Deploy_Extra
 
     public function display_admin_menu_list()
     {
-        include_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/views/admin-display-list.php';
+        if (isset($_GET['deploy'])) {
+            include_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/views/admin-display-detail.php';
+        } else {
+            include_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/views/admin-display-list.php';
+        }
     }
 
     public function display_admin_menu_configure()
