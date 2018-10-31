@@ -132,4 +132,12 @@ class Deploy_List_Table extends WP_List_Table
         }
     }
 
+    public function get_sortable_columns()
+    {
+        $sortable_columns = array(
+            'id' => ['id', false],
+            'date' => ['date', true],
+        );
+        return $sortable_columns;
+    }
 }
