@@ -111,6 +111,9 @@ class Deploy_Extra
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'get_current_diffs'),
                 ]);
                 break;
+            case 'static-maker_page_static-maker_deploy_extra_list':
+                wp_enqueue_style('smde-list-style', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/css/list.css');
+                break;
         }
     }
 

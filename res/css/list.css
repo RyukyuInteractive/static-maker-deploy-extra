@@ -1,0 +1,15 @@
+.column-id {
+	width: 60px;
+}
+
+.wp-list-table .column-date {
+	width: auto;
+}
+
+.column-type {
+	width: 60px;
+}
+
+.column-status {
+	width: 100px;
+}
