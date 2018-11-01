@@ -6,11 +6,13 @@ require_once STATIC_MAKER_DEPLOY_EXTRA_ABSPATH . '/includes/class-wp-list-table.
 class Deploy_List_Table extends WP_List_Table
 {
     private $per_page = 15;
+    private $path;
     private $db;
 
-    public function __construct(DB $db)
+    public function __construct(Path $path, DB $db)
     {
         // global $status, $page;
+        $this->path = $path;
         $this->db = $db;
 
         //Set parent defaults
@@ -28,6 +30,7 @@ class Deploy_List_Table extends WP_List_Table
             'cb' => '<input type="checkbox" />',
             'id' => 'ID',
             'date' => 'Date',
+            'exists' => 'File Existance',
             'type' => 'Type',
             'status' => 'Status',
         );
@@ -79,6 +82,11 @@ class Deploy_List_Table extends WP_List_Table
             default:
                 return print_r($item, true); //Show the whole array for troubleshooting purposes
         }
+    }
+
+    public function column_exists($item)
+    {
+        return $this->path->get_revision_existance($item['timestamp']) ? __('Yes', STATIC_MAKER_DEPLOY_EXTRA) : __('-', STATIC_MAKER_DEPLOY_EXTRA);
     }
 
     public function column_cb($item)

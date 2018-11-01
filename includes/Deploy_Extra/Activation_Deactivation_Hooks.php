@@ -50,6 +50,7 @@ function _create_list_table()
 			  timestamp VARCHAR(30),
 			  type VARCHAR(30),
 			  status VARCHAR(30),
+              deleted tinyint(1) DEFAULT 0,
 			  PRIMARY KEY (id)
 			) $charset_collate";
 

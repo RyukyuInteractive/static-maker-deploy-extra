@@ -45,4 +45,10 @@ class Path
         }
         return true;
     }
+
+    public function get_revision_existance($timestamp)
+    {
+        return is_dir($this->get_revision_path($timestamp));
+    }
+
 }

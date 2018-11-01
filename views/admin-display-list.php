@@ -1,7 +1,7 @@
 <?php
 namespace Static_Maker\Deploy_Extra;
 
-$table = new Deploy_List_Table(new DB())
+$table = new Deploy_List_Table(new Path(), new DB());
 ?>
 <h1><?_e('Schedule List', STATIC_MAKER_DEPLOY_EXTRA)?></h3>
 
