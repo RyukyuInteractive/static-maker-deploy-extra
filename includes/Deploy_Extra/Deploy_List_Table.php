@@ -53,7 +53,7 @@ class Deploy_List_Table extends WP_List_Table
         $total_items = $this->db->fetch_deploy_list_total_items();
 
         // sorting
-        $orderby = $_GET['orderby'] ?? 'date';
+        $orderby = $_GET['orderby'] ?? 'created_at';
         $order = $_GET['order'] ?? 'desc';
 
         $this->set_pagination_args(array(
