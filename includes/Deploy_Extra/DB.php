@@ -172,7 +172,7 @@ class DB
     public function fetch_deploy_list_total_items()
     {
         global $wpdb;
-        return $wpdb->get_var('SELECT COUNT(*) FROM ' . $this->list_table_name);
+        return $wpdb->get_var('SELECT COUNT(*) FROM ' . $this->list_table_name . ' WHERE deleted = 0');
     }
 
     public function is_valid_for_order($name)
