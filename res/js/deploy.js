@@ -1,41 +1,82 @@
 document.addEventListener("DOMContentLoaded", function() {
-	window.state = {
-		deployType: "whole",
-		partialConfirm: false,
-		showDiff: false,
-		diffData: [],
-		checkedFiles: {}
-	};
+	var setState = (function() {
+		var state = {
+			deployType: "whole",
+			partialConfirm: false,
+			showDiff: false,
+			diffData: [],
+			checkedFiles: {}
+		};
 
-	var setState = function(newState) {
-		// merge state
-		state = Object.keys(newState).reduce(function(a, c) {
-			a[c] = newState[c];
-			return a;
-		}, state);
+		return function(newState) {
+			// merge state
+			state = Object.keys(newState).reduce(function(a, c) {
+				a[c] = newState[c];
+				return a;
+			}, state);
 
-		applyState();
-	};
+			applyState(state);
+		};
+	})();
 
 	/**
 	 * called every time the state is updated
 	 */
-	var applyState = function() {
+	var applyState = function(state) {
 		console.log(state);
 
 		// render components
-		document
-			.querySelector(".smde-deploy-form-wrapper")
-			.appendChild(
-				smdeComponents
-					.DeployScheduleButtonComponent(setState, state)
-					.create()
-			);
-		document
-			.querySelector(".diff-actions")
-			.appendChild(
-				smdeComponents.DiffActionsComponent(setState, state).create()
-			);
+
+		// schedule button components
+		if (state.deployType === "whole" || state.partialConfirm) {
+			var onDeploy = function(data) {
+				var requestData;
+
+				if (state.deployType === "partial") {
+					requestData = partialScheduleDeployData;
+				} else {
+					requestData = scheduleDeployData;
+				}
+
+				jQuery
+					.post(requestData.url, {
+						action: requestData.action,
+						date: data.date,
+						time: data.time,
+						files: state.checkedFiles
+					})
+					.done(function() {
+						alert("succeeded");
+						location.reload();
+					})
+					.fail(function(e) {
+						alert(e.responseText);
+					});
+			};
+			document
+				.querySelector(".smde-deploy-form-wrapper")
+				.appendChild(
+					smdeComponents
+						.DeployScheduleButtonComponent(setState, state)
+						.create(onDeploy)
+				);
+		} else {
+			smdeComponents.DeployScheduleButtonComponent().remove();
+		}
+
+		// fetching the diff button component
+		if (state.deployType === "partial") {
+			document
+				.querySelector(".diff-actions")
+				.appendChild(
+					smdeComponents
+						.DiffActionsComponent(setState, state)
+						.create()
+				);
+		} else {
+			smdeComponents.DiffActionsComponent(setState, state).remove();
+		}
+
 		document
 			.querySelector(".diff-table-output")
 			.appendChild(

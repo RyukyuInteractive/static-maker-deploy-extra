@@ -107,4 +107,24 @@ class Revision
 
         return true;
     }
+
+    public function make_revision_from_existing($timestamp)
+    {
+        if (!$timestamp) {
+            return false;
+        }
+
+        if (!$this->path->exists_revision($timestamp)) {
+            return false;
+        }
+
+        $this->db->insert_partial_deploy([
+            'date' => date('Y-m-d H:i:s', $timestamp),
+            'timestamp' => $timestamp,
+            'type' => 'whole',
+            'status' => 'waiting',
+        ], $files);
+
+        return true;
+    }
 }

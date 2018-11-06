@@ -29,11 +29,6 @@ class Cron
         // process deploy
         $this->rsync->sync_remote($timestamp);
 
-//        ob_flush();
-        //        ob_start();
-        //        var_dump($deploy);
-        //        file_put_contents(ABSPATH . '/hoge', ob_get_flush());
-
         $this->db->update_status($deploy, 'completed');
     }
 

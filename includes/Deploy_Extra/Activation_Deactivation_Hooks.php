@@ -51,6 +51,8 @@ function _create_list_table()
 			  type VARCHAR(30),
 			  status VARCHAR(30),
               deleted tinyint(1) DEFAULT 0,
+              created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+              updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
 			  PRIMARY KEY (id)
 			) $charset_collate";
 
@@ -69,6 +71,8 @@ function _create_diff_table()
 			  foreign_id int(20),
 			  file_path VARCHAR(512),
 			  action VARCHAR(30),
+              created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+              updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
 			  PRIMARY KEY (id)
 			) $charset_collate";
 

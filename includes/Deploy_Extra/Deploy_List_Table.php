@@ -31,7 +31,8 @@ class Deploy_List_Table extends WP_List_Table
         $columns = array(
             'cb' => '<input type="checkbox" />',
             'id' => 'ID',
-            'date' => 'Date',
+            'date' => 'Revision Date',
+            'created_at' => 'Created At',
             'exists' => 'File Existance',
             'type' => 'Type',
             'status' => 'Status',
@@ -81,6 +82,7 @@ class Deploy_List_Table extends WP_List_Table
             case 'date':
             case 'type':
             case 'status':
+            case 'created_at':
                 return $item[$column_name];
             default:
                 return print_r($item, true); //Show the whole array for troubleshooting purposes
@@ -131,7 +133,6 @@ class Deploy_List_Table extends WP_List_Table
     public function delete_deploy_by_ids($ids)
     {
         if ($this->db->soft_delete_deploy_by_ids($ids) === false) {
-            var_dump($ids);
             return false;
         }
 
@@ -149,6 +150,7 @@ class Deploy_List_Table extends WP_List_Table
     {
         $sortable_columns = array(
             'date' => ['date', false],
+            'created_at' => ['created_at', false],
         );
         return $sortable_columns;
     }

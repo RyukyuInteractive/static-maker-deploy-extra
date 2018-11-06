@@ -7,17 +7,20 @@ class Ajax
     private $diff;
     private $rsync;
     private $cron;
+    private $db;
     private $revision;
 
     public function __construct(
         Diff $diff,
         Rsync $rsync,
         Cron $cron,
+        DB $db,
         Revision $revision
     ) {
         $this->diff = $diff;
         $this->rsync = $rsync;
         $this->cron = $cron;
+        $this->db = $db;
         $this->revision = $revision;
     }
 
@@ -50,6 +53,7 @@ class Ajax
 
         $date = $_POST['date'] ?? null;
         $time = $_POST['time'] ?? null;
+        $deploy = $_POST['deploy'] ?? null;
 
         if (!$date || !$time) {
             wp_die(__('please set required parameters', STATIC_MAKER_DEPLOY_EXTRA), '', 422);
@@ -63,8 +67,18 @@ class Ajax
         $timestamp = strtotime($date . ' ' . $time);
 
         // create revision for `timestamp`
-        if (!$this->revision->make_revision($timestamp)) {
-            wp_die(__('failed to create a revision', STATIC_MAKER_DEPLOY_EXTRA), '', 500);
+        if ($deploy) {
+            $revision_timestamp = $this->db->fetch_timestamp_by_id($deploy);
+
+            if (!$revision_timestamp) {return false;}
+
+            if (!$this->revision->make_revision_from_existing($revision_timestamp)) {
+                wp_die(__('failed to create a revision', STATIC_MAKER_DEPLOY_EXTRA), '', 500);
+            }
+        } else {
+            if (!$this->revision->make_revision($timestamp)) {
+                wp_die(__('failed to create a revision', STATIC_MAKER_DEPLOY_EXTRA), '', 500);
+            }
         }
 
         wp_schedule_single_event($timestamp, 'smde_schedule_handler', [intval($timestamp)]);

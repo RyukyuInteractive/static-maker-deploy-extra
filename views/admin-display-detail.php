@@ -30,3 +30,5 @@ $table->prepare_items();
     </form>
 </div>
 <?endif?>
+
+<div class="smde-deploy-action-wrapper" style="display: contents;"></div>

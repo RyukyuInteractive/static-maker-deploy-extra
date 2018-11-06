@@ -87,34 +87,47 @@ class Deploy_Extra
     {
         switch ($hook) {
             case 'static-maker_page_static-maker_deploy_extra_main':
-                wp_register_script('smde_components', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/deploy.js');
+
+                wp_register_script('smde_components', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/components.js');
                 wp_enqueue_script('smde_components');
 
-                wp_localize_script('smde_components', 'scheduleDeployData', [
+                wp_register_script('smde_deploy', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/deploy.js');
+                wp_enqueue_script('smde_deploy');
+
+                wp_localize_script('smde_deploy', 'scheduleDeployData', [
                     'action' => 'static-maker-deploy-extra-schedule_deploy',
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'schedule_deploy'),
                 ]);
-                wp_localize_script('smde_components', 'partialScheduleDeployData', [
+                wp_localize_script('smde_deploy', 'partialScheduleDeployData', [
                     'action' => 'static-maker-deploy-extra-partial_schedule_deploy',
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'partial_schedule_deploy'),
                 ]);
-                wp_localize_script('smde_components', 'unscheduleDeployData', [
+                wp_localize_script('smde_deploy', 'unscheduleDeployData', [
                     'action' => 'static-maker-deploy-extra-unschedule_deploy',
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'unschedule_deploy'),
                 ]);
-                wp_localize_script('smde_components', 'downloadProductionData', [
+                wp_localize_script('smde_deploy', 'downloadProductionData', [
                     'action' => 'static-maker-deploy-extra-ajax_download_production_data',
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'download_production_data'),
                 ]);
-                wp_localize_script('smde_components', 'getCurrentDiffsData', [
+                wp_localize_script('smde_deploy', 'getCurrentDiffsData', [
                     'action' => 'static-maker-deploy-extra-ajax_get_current_diffs',
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'get_current_diffs'),
                 ]);
-
-                wp_register_script('smde_deploy', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/components.js');
-                wp_enqueue_script('smde_deploy');
                 break;
             case 'static-maker_page_static-maker_deploy_extra_list':
+
+                wp_register_script('smde_components', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/components.js');
+                wp_enqueue_script('smde_components');
+
+                wp_register_script('smde_deploy_detail', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/detail.js');
+                wp_enqueue_script('smde_deploy_detail');
+
+                wp_localize_script('smde_deploy_detail', 'scheduleDeployData', [
+                    'action' => 'static-maker-deploy-extra-schedule_deploy',
+                    'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'schedule_deploy'),
+                ]);
+
                 wp_enqueue_style('smde-list-style', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/css/list.css');
                 break;
         }

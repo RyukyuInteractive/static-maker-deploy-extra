@@ -136,6 +136,9 @@
 					}
 
 					return node;
+				},
+				remove() {
+					removeAllExsistingDoms(this.name);
 				}
 			};
 		},
@@ -189,6 +192,9 @@
 					}
 
 					return node;
+				},
+				remove() {
+					removeAllExsistingDoms(this.name);
 				}
 			};
 		},
@@ -239,6 +245,9 @@
 					});
 
 					return node;
+				},
+				remove() {
+					removeAllExsistingDoms(this.name);
 				}
 			};
 		},
@@ -251,17 +260,15 @@
 		DeployScheduleButtonComponent: function(setState, state) {
 			return {
 				name: "DiffScheduleButton",
-				create: function() {
+				create: function(onDeploy) {
+					onDeploy = onDeploy || function() {};
+
 					removeAllExsistingDoms(this.name);
 
 					var node = document.createDocumentFragment();
 					var div = document.createElement("div");
 					div.classList.add(this.name);
 					node.appendChild(div);
-
-					if (state.deployType !== "whole" && !state.partialConfirm) {
-						return node;
-					}
 
 					var label = document.createElement("label");
 					var text = document.createTextNode("日付");
@@ -286,65 +293,28 @@
 					button.classList.add("button", "button-primary");
 					button.textContent = "デプロイ";
 
-					if (state.deployType === "partial") {
-						button.addEventListener("click", function(e) {
-							e.preventDefault();
+					button.addEventListener("click", function(e) {
+						e.preventDefault();
 
-							var date = document.querySelector(
-								'[name="schedule_date"]'
-							).value;
-							var time = document.querySelector(
-								'[name="schedule_time"]'
-							).value;
+						var date = document.querySelector(
+							'[name="schedule_date"]'
+						).value;
+						var time = document.querySelector(
+							'[name="schedule_time"]'
+						).value;
 
-							var requestData = partialScheduleDeployData;
-
-							jQuery
-								.post(requestData.url, {
-									action: requestData.action,
-									date: date,
-									time: time,
-									files: state.checkedFiles
-								})
-								.done(function() {
-									alert("succeeded");
-									location.reload();
-								})
-								.fail(function(e) {
-									alert(e.responseText);
-								});
+						onDeploy({
+							date: date,
+							time: time
 						});
-					} else {
-						button.addEventListener("click", function(e) {
-							e.preventDefault();
+					});
 
-							var date = document.querySelector(
-								'[name="schedule_date"]'
-							).value;
-							var time = document.querySelector(
-								'[name="schedule_time"]'
-							).value;
-
-							var requestData = scheduleDeployData;
-
-							jQuery
-								.post(requestData.url, {
-									action: requestData.action,
-									date: date,
-									time: time
-								})
-								.done(function() {
-									alert("succeeded");
-									location.reload();
-								})
-								.fail(function(e) {
-									alert(e.responseText);
-								});
-						});
-					}
 					div.appendChild(button);
 
 					return node;
+				},
+				remove() {
+					removeAllExsistingDoms(this.name);
 				}
 			};
 		},
@@ -364,10 +334,6 @@
 					var div = document.createElement("div");
 					div.classList.add(this.name);
 					node.appendChild(div);
-
-					if (state.deployType !== "partial") {
-						return node;
-					}
 
 					var button = document.createElement("button");
 					button.classList.add("button-primary");
@@ -393,6 +359,9 @@
 					div.appendChild(button);
 
 					return node;
+				},
+				remove() {
+					removeAllExsistingDoms(this.name);
 				}
 			};
 		}
