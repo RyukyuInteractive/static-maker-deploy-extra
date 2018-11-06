@@ -151,9 +151,9 @@ class DB
             }
         }
 
-        $query = 'SELECT * FROM ' . STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME;
+        $query = "SELECT * FROM $this->list_table_name WHERE deleted = 0 ";
         if ($search_queries) {
-            $query .= ' WHERE ' . implode(' OR ', $search_queries);
+            $query .= ' AND (' . implode(' OR ', $search_queries) . ')';
         }
 
         // if the orderby is available, validate orderby is in the columns name
@@ -172,11 +172,32 @@ class DB
     public function fetch_deploy_list_total_items()
     {
         global $wpdb;
-        return $wpdb->get_var('SELECT COUNT(*) FROM ' . STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME);
+        return $wpdb->get_var('SELECT COUNT(*) FROM ' . $this->list_table_name);
     }
 
     public function is_valid_for_order($name)
     {
         return strtolower($name) === 'asc' || strtolower($name) === 'desc';
+    }
+
+    public function fetch_timestamp_by_id($id)
+    {
+        global $wpdb;
+        $sql = "SELECT timestamp FROM $this->list_table_name WHERE id = %d";
+        return $wpdb->get_var($wpdb->prepare($sql, [$id]));
+    }
+
+    public function soft_delete_deploy_by_ids($ids)
+    {
+        global $wpdb;
+        $table = $this->list_table_name;
+
+        $place_holders = [];
+        foreach ($ids as $id) {
+            $place_holders[] = '%d';
+        }
+
+        $sql = "UPDATE $table SET deleted = 1 WHERE id in (" . implode(', ', $place_holders) . ')';
+        return $wpdb->query($wpdb->prepare($sql, $ids));
     }
 }

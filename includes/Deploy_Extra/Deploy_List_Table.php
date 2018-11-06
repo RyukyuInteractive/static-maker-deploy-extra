@@ -7,12 +7,14 @@ class Deploy_List_Table extends WP_List_Table
 {
     private $per_page = 15;
     private $path;
+    private $file;
     private $db;
 
-    public function __construct(Path $path, DB $db)
+    public function __construct(Path $path, File $file, DB $db)
     {
         // global $status, $page;
         $this->path = $path;
+        $this->file = $file;
         $this->db = $db;
 
         //Set parent defaults
@@ -60,6 +62,7 @@ class Deploy_List_Table extends WP_List_Table
 
         $columns = $this->get_columns();
         unset($columns['cb']);
+        unset($columns['exists']);
 
         $this->items = $this->db->fetch_deploy_list([
             'current_page' => $current_page,
@@ -86,7 +89,7 @@ class Deploy_List_Table extends WP_List_Table
 
     public function column_exists($item)
     {
-        return $this->path->get_revision_existance($item['timestamp']) ? __('Yes', STATIC_MAKER_DEPLOY_EXTRA) : __('-', STATIC_MAKER_DEPLOY_EXTRA);
+        return $this->path->exists_revision($item['timestamp']) ? __('Yes', STATIC_MAKER_DEPLOY_EXTRA) : __('-', STATIC_MAKER_DEPLOY_EXTRA);
     }
 
     public function column_cb($item)
@@ -114,7 +117,9 @@ class Deploy_List_Table extends WP_List_Table
 
     private function process_bulk_action()
     {
-        if ('delete' === $this->current_action() && isset($_POST['deploy'])) {
+        if ($this->current_action() === 'delete' && isset($_POST['deploy'])) {
+            $this->delete_deploy_by_ids($_POST['deploy']);
+
             $message = __('Deleted (not implemented yet)', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
             echo '<div id="message" class="updated notice is-dismissible">';
             echo '<p>' . $message . '</p>';
@@ -123,10 +128,27 @@ class Deploy_List_Table extends WP_List_Table
         }
     }
 
+    public function delete_deploy_by_ids($ids)
+    {
+        if ($this->db->soft_delete_deploy_by_ids($ids) === false) {
+            var_dump($ids);
+            return false;
+        }
+
+        foreach ($ids as $id) {
+            $timestamp = $this->db->fetch_timestamp_by_id($id);
+            if ($this->path->exists_revision($timestamp)) {
+                $this->file->recurse_rm($this->path->get_revision_path($timestamp));
+            }
+        }
+
+        return true;
+    }
+
     public function get_sortable_columns()
     {
         $sortable_columns = array(
-            'date' => ['date', true],
+            'date' => ['date', false],
         );
         return $sortable_columns;
     }

@@ -46,7 +46,7 @@ class Path
         return true;
     }
 
-    public function get_revision_existance($timestamp)
+    public function exists_revision($timestamp)
     {
         return is_dir($this->get_revision_path($timestamp));
     }
