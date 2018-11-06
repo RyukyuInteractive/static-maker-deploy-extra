@@ -21,6 +21,7 @@ $table->prepare_items();
     <p><?_e('Deploy ID', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['id']?></p>
 </div>
 
+<?if ($deploy['type'] === 'partial'): ?>
 <div class="wrap">
     <h2 class="wp-heading-inline"><?_e('Files', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
     <form method="post">
@@ -28,3 +29,4 @@ $table->prepare_items();
         <?$table->display()?>
     </form>
 </div>
+<?endif?>
