@@ -98,4 +98,48 @@ class File
         }
         return true;
     }
+
+    /**
+     * replace all strings of files in the $directory, and export them to $export_to
+     *
+     * TODO: remove if unnecessary
+     */
+    public function replace_all_files_in_path($search, $replace, $directory, $export_to)
+    {
+        try {
+            if (!realpath($directory)) {
+                $this->create_dir($directory);
+                $directory = realpath($directory);
+            }
+            if (!realpath($export_to)) {
+                $this->create_dir($export_to);
+                $export_to = realpath($export_to);
+            }
+
+            $it = new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $files = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach ($files as $file) {
+                var_dump($file->getRealPath());
+                $export_path = $export_to . DIRECTORY_SEPARATOR . str_replace($directory, '', $file->getRealPath());
+                if ($file->isDir()) {
+                    @mkdir($export_path);
+                    continue;
+                }
+
+                $file_contents = file_get_contents($file->getRealPath());
+                // TODO: get replace values from options
+                $file_contents = str_replace('localhost', 'localhost:5050', $file_contents);
+                file_put_contents($export_path, $file_contents);
+            }
+            // rmdir($directory);
+        } catch (\UnexpectedValueException $e) {
+            // No such file or directory, return true
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
 }

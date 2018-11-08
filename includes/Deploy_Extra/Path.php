@@ -30,6 +30,18 @@ class Path
         }
     }
 
+    /**
+     * TODO: remove if unnecessary
+     */
+    public function get_local_production_replaced_path($realpath = true)
+    {
+        if ($realpath) {
+            return realpath(wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/production-replaced/');
+        } else {
+            return wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/production-replaced/';
+        }
+    }
+
     public function create_revision_dir($timestamp = null)
     {
         $revision_path = $this->get_revision_path($timestamp);
