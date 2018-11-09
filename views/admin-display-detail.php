@@ -12,23 +12,23 @@ $table = new Deploy_Files_List_Table($db, $id);
 $table->prepare_items();
 ?>
 
-<h1><?_e('Deploy Detail', STATIC_MAKER_DEPLOY_EXTRA)?></h1>
+<h1><?=__('Deploy Detail', STATIC_MAKER_DEPLOY_EXTRA)?></h1>
 
 <div class="wrap">
-    <h2 class="wp-heading-inline"><?_e('Deploy Info', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
-    <p><?_e('Date', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['date']?></p>
-    <p><?_e('Timestamp', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['timestamp']?></p>
-    <p><?_e('Deploy ID', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['id']?></p>
+    <h2 class="wp-heading-inline"><?=__('Deploy Info', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
+    <p><?=__('Date', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['date']?></p>
+    <p><?=__('Timestamp', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['timestamp']?></p>
+    <p><?=__('Deploy ID', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['id']?></p>
 </div>
 
-<?if ($deploy['type'] === 'partial'): ?>
+<?php if ($deploy['type'] === 'partial'): ?>
 <div class="wrap">
-    <h2 class="wp-heading-inline"><?_e('Files', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
+    <h2 class="wp-heading-inline"><?=__('Files', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
     <form method="post">
-        <?$table->search_box('serach', 'search_id')?>
-        <?$table->display()?>
+        <?php $table->search_box('serach', 'search_id')?>
+        <?php $table->display()?>
     </form>
 </div>
-<?endif?>
+<?php endif?>
 
 <div class="smde-deploy-action-wrapper" style="display: contents;"></div>
