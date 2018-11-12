@@ -48,6 +48,7 @@ class File
                     @mkdir($dst . DIRECTORY_SEPARATOR . $src_rel_path);
                 } else {
                     copy($file->getRealPath(), $dst . DIRECTORY_SEPARATOR . $src_rel_path);
+                    touch($dst . DIRECTORY_SEPARATOR . $src_rel_path, $file->getMTime());
                 }
             }
         } catch (\UnexpectedValueException $e) {
