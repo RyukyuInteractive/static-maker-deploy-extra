@@ -122,7 +122,7 @@ class Deploy_List_Table extends WP_List_Table
         if ($this->current_action() === 'delete' && isset($_POST['deploy'])) {
             $this->delete_deploy_by_ids($_POST['deploy']);
 
-            $message = __('Deleted (not implemented yet)', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
+            $message = __('Deleted ', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
             echo '<div id="message" class="updated notice is-dismissible">';
             echo '<p>' . $message . '</p>';
             echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">この通知を非表示にする</span></button>';
