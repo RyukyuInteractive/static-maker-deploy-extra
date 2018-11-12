@@ -11,7 +11,7 @@ class Path
             return false;
         }
 
-        $rawpath = wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/' . $timestamp . '/';
+        $rawpath = get_home_path() . 'static-maker-deploy-extra/' . $timestamp . '/';
         $realpath = realpath($rawpath);
 
         if ($realpath) {
@@ -24,9 +24,9 @@ class Path
     public function get_local_production_path($realpath = true)
     {
         if ($realpath) {
-            return realpath(wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/production/');
+            return realpath(get_home_path() . 'static-maker-deploy-extra/production/');
         } else {
-            return wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/production/';
+            return get_home_path() . 'static-maker-deploy-extra/production/';
         }
     }
 
@@ -36,9 +36,9 @@ class Path
     public function get_local_production_replaced_path($realpath = true)
     {
         if ($realpath) {
-            return realpath(wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/production-replaced/');
+            return realpath(get_home_path() . 'static-maker-deploy-extra/production-replaced/');
         } else {
-            return wp_upload_dir()['basedir'] . '/static-maker-deploy-extra/production-replaced/';
+            return get_home_path() . 'static-maker-deploy-extra/production-replaced/';
         }
     }
 
