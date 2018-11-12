@@ -30,19 +30,33 @@ class File
 
     public function recurse_copy($src, $dst)
     {
-        $dir = opendir($src);
+        $src = realpath($src);
+
         @mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->recurse_copy($src . '/' . $file, $dst . '/' . $file);
+        $dst = realpath($dst);
+
+        if (!$src || !$dst) {return false;}
+
+        try {
+            $it = new \RecursiveDirectoryIterator($src, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $files = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach ($files as $file) {
+                $src_rel_path = str_replace($src, '', $file->getRealPath());
+
+                if ($file->isDir()) {
+                    @mkdir($dst . DIRECTORY_SEPARATOR . $src_rel_path);
                 } else {
-//                    copy($src . '/' . $file, $dst . '/' . $file);
-                    shell_exec("cp -rp $src/$file $dst/$file");
+                    copy($file->getRealPath(), $dst . DIRECTORY_SEPARATOR . $src_rel_path);
                 }
             }
+        } catch (\UnexpectedValueException $e) {
+            return false;
+        } catch (\Exception $e) {
+            return false;
         }
-        closedir($dir);
+
+        return true;
     }
 
     public function copy_partial_files($src_base, $dst_base, $files)
