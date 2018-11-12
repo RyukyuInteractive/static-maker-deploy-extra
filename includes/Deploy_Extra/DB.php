@@ -4,24 +4,27 @@ namespace Static_Maker\Deploy_Extra;
 
 class DB
 {
-    public $list_table_name = STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME;
-    public $diff_table_name = STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_DIFF_TABLE_NAME;
-
-    public function __construct()
+    public static function get_list_table_name()
     {
+        return STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_LIST_TABLE_NAME;
+    }
+
+    public static function get_diff_table_name()
+    {
+        return STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_DIFF_TABLE_NAME;
     }
 
     public function insert_whole_deploy($data)
     {
         global $wpdb;
-        $table = $this->list_table_name;
+        $table = $this->get_list_table_name();
         return $wpdb->insert($table, $data);
     }
 
     public function insert_partial_deploy($deploy, $files)
     {
         global $wpdb;
-        $list_table = $this->list_table_name;
+        $list_table = $this->get_list_table_name();
 
         // save deploy data
         $wpdb->insert($list_table, $deploy);
@@ -46,7 +49,7 @@ class DB
         global $wpdb;
 
         $id = $deploy['id'];
-        $table = $this->list_table_name;
+        $table = $this->get_list_table_name();
         return $wpdb->update($table, ['status' => $status], ['id' => $id]) === 1;
     }
 
@@ -62,28 +65,28 @@ class DB
         }
 
         $id = $deploy['id'];
-        $table = $this->list_table_name;
+        $table = $this->get_list_table_name();
         return $wpdb->update($table, ['status' => $status], ['id' => $id]) === 1;
     }
 
     public function fetch_latest_deploy_of_timestamp($timestamp)
     {
         global $wpdb;
-        $sql = "SELECT * FROM $this->list_table_name WHERE timestamp = %s ORDER BY id DESC LIMIT 1";
+        $sql = 'SELECT * FROM ' . $this->get_list_table_name() . 'WHERE timestamp = %s ORDER BY id DESC LIMIT 1';
         return $wpdb->get_row($wpdb->prepare($sql, $timestamp), ARRAY_A);
     }
 
     public function fetch_waiting_deploy_by_timestamp($timestamp)
     {
         global $wpdb;
-        $sql = "SELECT * FROM $this->list_table_name WHERE status = 'waiting' AND timestamp = %s ORDER BY id DESC LIMIT 1";
+        $sql = 'SELECT * FROM ' . $this->get_list_table_name() . ' WHERE status = "waiting" AND timestamp = %s ORDER BY id DESC LIMIT 1';
         return $wpdb->get_row($wpdb->prepare($sql, $timestamp), ARRAY_A);
     }
 
     public function fetch_deploy($id)
     {
         global $wpdb;
-        $sql = "SELECT * FROM $this->list_table_name WHERE id = %d";
+        $sql = 'SELECT * FROM ' . $this->get_list_table_name() . ' WHERE id = %d';
         return $wpdb->get_row($wpdb->prepare($sql, $id), ARRAY_A);
     }
 
@@ -151,7 +154,7 @@ class DB
             }
         }
 
-        $query = "SELECT * FROM $this->list_table_name WHERE deleted = 0 ";
+        $query = 'SELECT * FROM ' . $this->get_list_table_name() . ' WHERE deleted = 0 ';
         if ($search_queries) {
             $query .= ' AND (' . implode(' OR ', $search_queries) . ')';
         }
@@ -172,7 +175,7 @@ class DB
     public function fetch_deploy_list_total_items()
     {
         global $wpdb;
-        return $wpdb->get_var('SELECT COUNT(*) FROM ' . $this->list_table_name . ' WHERE deleted = 0');
+        return $wpdb->get_var('SELECT COUNT(*) FROM ' . $this->get_list_table_name() . ' WHERE deleted = 0');
     }
 
     public function is_valid_for_order($name)
@@ -183,14 +186,14 @@ class DB
     public function fetch_timestamp_by_id($id)
     {
         global $wpdb;
-        $sql = "SELECT timestamp FROM $this->list_table_name WHERE id = %d";
+        $sql = 'SELECT timestamp FROM ' . $this->get_list_table_name() . ' WHERE id = %d';
         return $wpdb->get_var($wpdb->prepare($sql, [$id]));
     }
 
     public function soft_delete_deploy_by_ids($ids)
     {
         global $wpdb;
-        $table = $this->list_table_name;
+        $table = $this->get_list_table_name();
 
         $place_holders = [];
         foreach ($ids as $id) {

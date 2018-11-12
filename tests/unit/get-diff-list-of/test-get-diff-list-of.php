@@ -7,28 +7,27 @@ use PHPUnit\Framework\TestCase;
 
 final class DiffListOfTest extends TestCase
 {
-    public function testIsDiffCorrectFromCase1ToCase2(): void
+    private function get_diff_instance_of_specific_cases($rev_case, $prd_case)
     {
-        $rev_case = '1';
-        $prd_case = '2';
-
-        $path = new Static_Maker\Deploy_Extra\Path();
-        $file = new Static_Maker\Deploy_Extra\File();
-        $option = new Static_Maker\Deploy_Extra\Option();
         $static_maker = $this->createMock(\Static_Maker\Deploy_Extra\Static_Maker::class);
-        $rsync = new \Static_Maker\Deploy_Extra\Rsync($file, $path, $option, $static_maker);
 
         $path_mock = $this->getMockBuilder(Static_Maker\Deploy_Extra\Path::class)
             ->setMethods(['get_local_production_path', 'get_revision_path'])
             ->getMock();
-
         $path_mock->method('get_revision_path')
             ->willReturn(__DIR__ . '/diffs/case' . $rev_case);
         $path_mock->method('get_local_production_path')
             ->willReturn(__DIR__ . '/diffs/case' . $prd_case);
 
-        $diff = new Static_Maker\Deploy_Extra\Diff($path_mock, $static_maker);
-        $smde = new Static_Maker\Deploy_Extra\Deploy_Extra($diff, $path, $rsync, $file, $static_maker);
+        return new Static_Maker\Deploy_Extra\Diff($path_mock, $static_maker);
+    }
+
+    public function testIsDiffCorrectFromCase1ToCase2(): void
+    {
+        $rev_case = '1';
+        $prd_case = '2';
+
+        $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
 
         $expected = [
             [
@@ -36,9 +35,9 @@ final class DiffListOfTest extends TestCase
                 'status' => 'deleted',
             ],
         ];
-        $diff = $smde->diff->get_diff_list('case' . $rev_case);
 
-        $this->assertEquals($expected, $diff);
+        $diff_out = $diff->get_diff_list('case' . $rev_case);
+        $this->assertEquals($expected, $diff_out);
     }
 
     public function testIsDiffCorrectFromCase3ToCase2(): void
@@ -46,23 +45,7 @@ final class DiffListOfTest extends TestCase
         $rev_case = '3';
         $prd_case = '2';
 
-        $path = new Static_Maker\Deploy_Extra\Path();
-        $file = new Static_Maker\Deploy_Extra\File();
-        $option = new Static_Maker\Deploy_Extra\Option();
-        $static_maker = $this->createMock(\Static_Maker\Deploy_Extra\Static_Maker::class);
-        $rsync = new \Static_Maker\Deploy_Extra\Rsync($file, $path, $option, $static_maker);
-
-        $path_mock = $this->getMockBuilder(Static_Maker\Deploy_Extra\Path::class)
-            ->setMethods(['get_local_production_path', 'get_revision_path'])
-            ->getMock();
-
-        $path_mock->method('get_revision_path')
-            ->willReturn(__DIR__ . '/diffs/case' . $rev_case);
-        $path_mock->method('get_local_production_path')
-            ->willReturn(__DIR__ . '/diffs/case' . $prd_case);
-
-        $diff = new Static_Maker\Deploy_Extra\Diff($path_mock, $static_maker);
-        $smde = new Static_Maker\Deploy_Extra\Deploy_Extra($diff, $path, $rsync, $file, $static_maker);
+        $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
 
         $expected = [
             [
@@ -78,9 +61,9 @@ final class DiffListOfTest extends TestCase
                 'status' => 'deleted',
             ],
         ];
-        $diff = $smde->diff->get_diff_list('case' . $rev_case);
+        $diff_out = $diff->get_diff_list('case' . $rev_case);
 
-        $this->assertEquals($expected, $diff);
+        $this->assertEquals($expected, $diff_out);
     }
 
     public function testIsDiffCorrectFromCase3ToCase4(): void
@@ -88,23 +71,7 @@ final class DiffListOfTest extends TestCase
         $rev_case = '3';
         $prd_case = '4';
 
-        $path = new Static_Maker\Deploy_Extra\Path();
-        $file = new Static_Maker\Deploy_Extra\File();
-        $option = new Static_Maker\Deploy_Extra\Option();
-        $static_maker = $this->createMock(\Static_Maker\Deploy_Extra\Static_Maker::class);
-        $rsync = new \Static_Maker\Deploy_Extra\Rsync($file, $path, $option, $static_maker);
-
-        $path_mock = $this->getMockBuilder(Static_Maker\Deploy_Extra\Path::class)
-            ->setMethods(['get_local_production_path', 'get_revision_path'])
-            ->getMock();
-
-        $path_mock->method('get_revision_path')
-            ->willReturn(__DIR__ . '/diffs/case' . $rev_case);
-        $path_mock->method('get_local_production_path')
-            ->willReturn(__DIR__ . '/diffs/case' . $prd_case);
-
-        $diff = new Static_Maker\Deploy_Extra\Diff($path_mock, $static_maker);
-        $smde = new Static_Maker\Deploy_Extra\Deploy_Extra($diff, $path, $rsync, $file, $static_maker);
+        $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
 
         $expected = [
             [
@@ -116,9 +83,9 @@ final class DiffListOfTest extends TestCase
                 'status' => 'added',
             ],
         ];
-        $diff = $smde->diff->get_diff_list('case' . $rev_case);
+        $diff_out = $diff->get_diff_list('case' . $rev_case);
 
-        $this->assertEquals($expected, $diff);
+        $this->assertEquals($expected, $diff_out);
     }
 
     public function testIsDiffCorrectFromCase4ToCase3(): void
@@ -126,23 +93,7 @@ final class DiffListOfTest extends TestCase
         $rev_case = '4';
         $prd_case = '3';
 
-        $path = new Static_Maker\Deploy_Extra\Path();
-        $file = new Static_Maker\Deploy_Extra\File();
-        $option = new Static_Maker\Deploy_Extra\Option();
-        $static_maker = $this->createMock(\Static_Maker\Deploy_Extra\Static_Maker::class);
-        $rsync = new \Static_Maker\Deploy_Extra\Rsync($file, $path, $option, $static_maker);
-
-        $path_mock = $this->getMockBuilder(Static_Maker\Deploy_Extra\Path::class)
-            ->setMethods(['get_local_production_path', 'get_revision_path'])
-            ->getMock();
-
-        $path_mock->method('get_revision_path')
-            ->willReturn(__DIR__ . '/diffs/case' . $rev_case);
-        $path_mock->method('get_local_production_path')
-            ->willReturn(__DIR__ . '/diffs/case' . $prd_case);
-
-        $diff = new Static_Maker\Deploy_Extra\Diff($path_mock, $static_maker);
-        $smde = new Static_Maker\Deploy_Extra\Deploy_Extra($diff, $path, $rsync, $file, $static_maker);
+        $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
 
         $expected = [
             [
@@ -154,8 +105,8 @@ final class DiffListOfTest extends TestCase
                 'status' => 'deleted',
             ],
         ];
-        $diff = $smde->diff->get_diff_list('case' . $rev_case);
+        $diff_out = $diff->get_diff_list('case' . $rev_case);
 
-        $this->assertEquals($expected, $diff);
+        $this->assertEquals($expected, $diff_out);
     }
 }

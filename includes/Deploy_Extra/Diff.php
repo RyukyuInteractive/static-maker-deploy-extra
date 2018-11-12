@@ -66,12 +66,6 @@ class Diff
                         array_push($diffs, [
                             'file' => $rev_key,
                             'status' => 'modified',
-                            'time_diff' => !$time_diff,
-                            'size_diff' => !$size_diff,
-                            'times' => [$rev_file->getMTime(), $prd_file->getMTime()],
-                            'sizes' => [$rev_file->getSize(), $prd_file->getSize()],
-                            'rev_path' => $rev_path,
-                            'prod_path' => $prd_path,
                         ]);
                     }
 
