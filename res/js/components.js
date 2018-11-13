@@ -1,12 +1,12 @@
-(function(window) {
+;(function(window) {
 	var removeAllExsistingDoms = function(className) {
 		Array.prototype.forEach.call(
-			document.querySelectorAll("." + className),
+			document.querySelectorAll('.' + className),
 			function(e) {
-				e.remove();
+				e.remove()
 			}
-		);
-	};
+		)
+	}
 
 	window.smdeComponents = {
 		/**
@@ -18,129 +18,126 @@
 		 */
 		DiffTableComponent: function(setState, state) {
 			return {
-				name: "diff-table-component",
+				name: 'diff-table-component',
 				create: function() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 
-					var node = document.createDocumentFragment();
+					var node = document.createDocumentFragment()
 
-					var div = document.createElement("div");
-					div.classList.add(this.name);
-					node.appendChild(div);
+					var div = document.createElement('div')
+					div.classList.add(this.name)
+					node.appendChild(div)
 
 					if (
-						state.deployType !== "partial" ||
+						state.deployType !== 'partial' ||
 						!state.diffData.length ||
 						(state.partialConfirm && state.showDiff)
 					) {
-						return node;
+						return node
 					}
 
 					// table tag
 					div.appendChild(
 						(function() {
-							var table = document.createElement("table");
+							var table = document.createElement('table')
 							table.classList.add(
-								"wp-list-table",
-								"widefat",
-								"striped"
-							);
+								'wp-list-table',
+								'widefat',
+								'striped'
+							)
 
-							var thead = document.createElement("thead"),
-								td;
+							var thead = document.createElement('thead'),
+								td
 
-							td = document.createElement("td");
-							td.textContent = "Deploy";
-							thead.appendChild(td);
+							td = document.createElement('td')
+							td.textContent = 'Deploy'
+							thead.appendChild(td)
 
-							td = document.createElement("td");
-							td.textContent = "File";
-							thead.appendChild(td);
+							td = document.createElement('td')
+							td.textContent = 'File'
+							thead.appendChild(td)
 
-							td = document.createElement("td");
-							td.textContent = "Status";
-							thead.appendChild(td);
+							td = document.createElement('td')
+							td.textContent = 'Status'
+							thead.appendChild(td)
 
-							table.appendChild(thead);
+							table.appendChild(thead)
 
-							var tbody = document.createElement("tbody");
+							var tbody = document.createElement('tbody')
 
 							state.diffData.forEach(function(e) {
-								var tr = document.createElement("tr"),
-									td;
+								var tr = document.createElement('tr'),
+									td
 
-								td = document.createElement("td");
-								var input = document.createElement("input");
-								input.setAttribute("type", "checkbox");
+								td = document.createElement('td')
+								var input = document.createElement('input')
+								input.setAttribute('type', 'checkbox')
 								input.setAttribute(
-									"name",
-									"partial-file-checks"
-								);
-								input.setAttribute("value", e.file);
-								input.setAttribute("data-status", e.status);
+									'name',
+									'partial-file-checks'
+								)
+								input.setAttribute('value', e.file)
+								input.setAttribute('data-status', e.status)
 								if (state.checkedFiles[e.file]) {
-									input.setAttribute("checked", "checked");
+									input.setAttribute('checked', 'checked')
 								}
-								input.addEventListener("change", function(e) {
+								input.addEventListener('change', function(e) {
 									if (e.target.checked) {
 										state.checkedFiles[e.target.value] = {
 											file: e.target.value,
 											status: e.target.dataset.status
-										};
+										}
 									} else {
 										delete state.checkedFiles[
 											e.target.value
-										];
+										]
 									}
-									setState({});
-								});
+									setState({})
+								})
 
-								td.appendChild(input);
-								tr.appendChild(td);
+								td.appendChild(input)
+								tr.appendChild(td)
 
-								td = document.createElement("td");
-								td.textContent = e.file;
-								tr.appendChild(td);
+								td = document.createElement('td')
+								td.textContent = e.file
+								tr.appendChild(td)
 
-								td = document.createElement("td");
-								td.textContent = e.status;
-								tr.appendChild(td);
+								td = document.createElement('td')
+								td.textContent = e.status
+								tr.appendChild(td)
 
-								tbody.appendChild(tr);
-							});
+								tbody.appendChild(tr)
+							})
 
-							table.appendChild(tbody);
-							return table;
+							table.appendChild(tbody)
+							return table
 						})()
-					);
+					)
 
 					if (!state.partialConfirm && state.showDiff) {
-						var wrapper = document.createElement("div");
-						wrapper.classList.add("partial-table-actions");
-						var button = document.createElement("button");
-						button.classList.add(
-							"button",
-							"partial-confirm-action"
-						);
-						button.textContent = "Deploy";
+						var wrapper = document.createElement('div')
+						wrapper.classList.add('partial-table-actions')
+						var button = document.createElement('button')
+						button.classList.add('button', 'partial-confirm-action')
+						button.textContent = 'Deploy'
 
-						button.addEventListener("click", function(e) {
-							e.preventDefault();
+						button.addEventListener('click', function(e) {
+							e.preventDefault()
 							setState({
 								partialConfirm: true
-							});
-						});
+							})
+						})
 
-						wrapper.appendChild(button);
-						div.appendChild(wrapper);
+						wrapper.appendChild(button)
+						div.appendChild(wrapper)
 					}
 
-					return node;
+					return node
 				},
 				remove() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 				}
-			};
+			}
 		},
 		/**
 		 * Confirm List Component
@@ -151,52 +148,52 @@
 		 */
 		ConfirmListComponent: function(setState, state) {
 			return {
-				name: "ConfirmListComponent",
+				name: 'ConfirmListComponent',
 				create: function() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 
-					var node = document.createDocumentFragment();
-					var div = document.createElement("div");
-					div.classList.add(this.name);
-					node.appendChild(div);
+					var node = document.createDocumentFragment()
+					var div = document.createElement('div')
+					div.classList.add(this.name)
+					node.appendChild(div)
 
 					if (
-						state.deployType !== "partial" ||
+						state.deployType !== 'partial' ||
 						!Object.keys(state.checkedFiles).length ||
 						!state.partialConfirm
 					) {
-						return node;
+						return node
 					}
 
-					var ul = document.createElement("ul");
+					var ul = document.createElement('ul')
 
 					Object.keys(state.checkedFiles).forEach(function(key) {
-						var e = state.checkedFiles[key];
+						var e = state.checkedFiles[key]
 
-						var li = document.createElement("li");
-						li.textContent = e.status + ": " + e.file;
-						ul.appendChild(li);
-					});
+						var li = document.createElement('li')
+						li.textContent = e.status + ': ' + e.file
+						ul.appendChild(li)
+					})
 
-					div.appendChild(ul);
+					div.appendChild(ul)
 
 					if (state.partialConfirm) {
-						var button = document.createElement("button");
-						button.classList.add("button");
-						button.textContent = "Back";
-						button.addEventListener("click", function() {
-							setState({ partialConfirm: false });
-						});
+						var button = document.createElement('button')
+						button.classList.add('button')
+						button.textContent = 'Back'
+						button.addEventListener('click', function() {
+							setState({ partialConfirm: false })
+						})
 
-						div.appendChild(button);
+						div.appendChild(button)
 					}
 
-					return node;
+					return node
 				},
 				remove() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 				}
-			};
+			}
 		},
 		/**
 		 *
@@ -206,50 +203,49 @@
 		 */
 		DeployTypeRadioComponent: function(setState, state) {
 			return {
-				name: "DeployTypeRadioComponent",
+				name: 'DeployTypeRadioComponent',
 				create: function() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 
-					var node = document.createDocumentFragment();
-					var div = document.createElement("div");
-					div.classList.add(this.name);
-					node.appendChild(div);
-
-					[
+					var node = document.createDocumentFragment()
+					var div = document.createElement('div')
+					div.classList.add(this.name)
+					node.appendChild(div)
+					;[
 						{
-							text: "Deploy All Files",
-							type: "whole"
+							text: 'Deploy All Files',
+							type: 'whole'
 						},
 						{
-							text: "Specify Files to Deploy",
-							type: "partial"
+							text: 'Specify Files to Deploy',
+							type: 'partial'
 						}
 					].forEach(function(data) {
-						var label = document.createElement("label");
-						var input = document.createElement("input");
-						input.setAttribute("type", "radio");
-						input.setAttribute("name", "deploy-type");
-						input.setAttribute("value", data.type);
+						var label = document.createElement('label')
+						var input = document.createElement('input')
+						input.setAttribute('type', 'radio')
+						input.setAttribute('name', 'deploy-type')
+						input.setAttribute('value', data.type)
 						if (state.deployType === data.type) {
-							input.setAttribute("checked", "checked");
+							input.setAttribute('checked', 'checked')
 						}
-						input.addEventListener("change", function(e) {
+						input.addEventListener('change', function(e) {
 							setState({
 								deployType: e.target.value
-							});
-						});
-						label.appendChild(input);
-						label.appendChild(document.createTextNode(data.text));
+							})
+						})
+						label.appendChild(input)
+						label.appendChild(document.createTextNode(data.text))
 
-						div.appendChild(label);
-					});
+						div.appendChild(label)
+					})
 
-					return node;
+					return node
 				},
 				remove() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 				}
-			};
+			}
 		},
 		/**
 		 *
@@ -259,64 +255,64 @@
 		 */
 		DeployScheduleButtonComponent: function(setState, state) {
 			return {
-				name: "DiffScheduleButton",
+				name: 'DiffScheduleButton',
 				create: function(onDeploy) {
-					onDeploy = onDeploy || function() {};
+					onDeploy = onDeploy || function() {}
 
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 
-					var node = document.createDocumentFragment();
-					var div = document.createElement("div");
-					div.classList.add(this.name);
-					node.appendChild(div);
+					var node = document.createDocumentFragment()
+					var div = document.createElement('div')
+					div.classList.add(this.name)
+					node.appendChild(div)
 
-					var label = document.createElement("label");
-					var text = document.createTextNode("日付");
-					var input = document.createElement("input");
-					input.setAttribute("type", "date");
-					input.setAttribute("name", "schedule_date");
-					label.appendChild(text);
-					label.appendChild(input);
-					div.appendChild(label);
+					var label = document.createElement('label')
+					var text = document.createTextNode('日付')
+					var input = document.createElement('input')
+					input.setAttribute('type', 'date')
+					input.setAttribute('name', 'schedule_date')
+					label.appendChild(text)
+					label.appendChild(input)
+					div.appendChild(label)
 
-					label = document.createElement("label");
-					text = document.createTextNode("時間");
-					input = document.createElement("input");
-					input.setAttribute("type", "time");
-					input.setAttribute("name", "schedule_time");
-					label.appendChild(text);
-					label.appendChild(input);
-					div.appendChild(label);
+					label = document.createElement('label')
+					text = document.createTextNode('時間')
+					input = document.createElement('input')
+					input.setAttribute('type', 'time')
+					input.setAttribute('name', 'schedule_time')
+					label.appendChild(text)
+					label.appendChild(input)
+					div.appendChild(label)
 
-					var button = document.createElement("button");
-					button.setAttribute("type", "submit");
-					button.classList.add("button", "button-primary");
-					button.textContent = "デプロイ";
+					var button = document.createElement('button')
+					button.setAttribute('type', 'submit')
+					button.classList.add('button', 'button-primary')
+					button.textContent = 'デプロイ'
 
-					button.addEventListener("click", function(e) {
-						e.preventDefault();
+					button.addEventListener('click', function(e) {
+						e.preventDefault()
 
 						var date = document.querySelector(
 							'[name="schedule_date"]'
-						).value;
+						).value
 						var time = document.querySelector(
 							'[name="schedule_time"]'
-						).value;
+						).value
 
 						onDeploy({
 							date: date,
 							time: time
-						});
-					});
+						})
+					})
 
-					div.appendChild(button);
+					div.appendChild(button)
 
-					return node;
+					return node
 				},
 				remove() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 				}
-			};
+			}
 		},
 		/**
 		 *
@@ -326,20 +322,20 @@
 		 */
 		DiffActionsComponent: function(setState, state) {
 			return {
-				name: "DiffActionsComponent",
+				name: 'DiffActionsComponent',
 				create: function() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 
-					var node = document.createDocumentFragment();
-					var div = document.createElement("div");
-					div.classList.add(this.name);
-					node.appendChild(div);
+					var node = document.createDocumentFragment()
+					var div = document.createElement('div')
+					div.classList.add(this.name)
+					node.appendChild(div)
 
-					var button = document.createElement("button");
-					button.classList.add("button-primary");
-					button.addEventListener("click", function(e) {
-						e.preventDefault();
-						var requestData = getCurrentDiffsData;
+					var button = document.createElement('button')
+					button.classList.add('button-primary')
+					button.addEventListener('click', function(e) {
+						e.preventDefault()
+						var requestData = getCurrentDiffsData
 
 						jQuery
 							.post(requestData.url, {
@@ -349,21 +345,21 @@
 								setState({
 									diffData: e,
 									showDiff: true
-								});
+								})
 							})
 							.fail(function() {
-								alert("failed");
-							});
-					});
-					button.textContent = "差分取得";
-					div.appendChild(button);
+								alert('failed')
+							})
+					})
+					button.textContent = '差分取得'
+					div.appendChild(button)
 
-					return node;
+					return node
 				},
 				remove() {
-					removeAllExsistingDoms(this.name);
+					removeAllExsistingDoms(this.name)
 				}
-			};
+			}
 		}
-	};
-})(window);
+	}
+})(window)
