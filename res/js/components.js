@@ -1,4 +1,7 @@
+window.addEventListener('load', function() {})
 ;(function(window) {
+	var h = hyperapp.h
+
 	var removeAllExsistingDoms = function(className) {
 		Array.prototype.forEach.call(
 			document.querySelectorAll('.' + className),
@@ -9,6 +12,47 @@
 	}
 
 	window.smdeComponents = {
+		HDeployScheduleSelector: function(opts) {
+			var setScheduleDate = opts.setScheduleDate
+			var setScheduleTime = opts.setScheduleTime
+			var requestDeploy = opts.requestDeploy
+
+			return h('div', {}, [
+				h('label', {}, [
+					'Date',
+					h('input', {
+						type: 'date',
+						name: 'schedule_date',
+						onchange: function(e) {
+							setScheduleDate(e.target.value)
+						}
+					})
+				]),
+				h('label', {}, [
+					'Time',
+					h('input', {
+						type: 'time',
+						name: 'schedule_time',
+						onchange: function(e) {
+							setScheduleTime(e.target.value)
+						}
+					})
+				]),
+				h(
+					'button',
+					{
+						type: 'submit',
+						class: 'button button-primary',
+						onclick: function(e) {
+							e.preventDefault()
+							requestDeploy()
+						}
+					},
+					'Deploy'
+				)
+			])
+		},
+
 		/**
 		 * Diff Table Component
 		 *

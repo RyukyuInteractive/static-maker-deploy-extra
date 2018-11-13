@@ -9,6 +9,8 @@
 	<div class="diff-confirm-output" style="display: contents;"></div>
 	<div class="smde-deploy-form-wrapper" style="display: contents;"></div>
 
+	<div class="smde-deploy-app"></div>
+
 	<h3><?=__('Schedule List', STATIC_MAKER_DEPLOY_EXTRA)?></h3>
 	<p><?=__('Now')?>: <?=date('Y-m-d H:i:s')?></p>
 	<ul>

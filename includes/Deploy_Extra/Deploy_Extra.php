@@ -90,9 +90,11 @@ class Deploy_Extra
      */
     public function enqueue_scripts($hook)
     {
+        wp_register_script('smde_hyperapp', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/hyperapp.js');
+        wp_enqueue_script('smde_hyperapp');
+
         switch ($hook) {
             case 'static-maker_page_static-maker_deploy_extra_main':
-
                 wp_register_script('smde_components', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/components.js');
                 wp_enqueue_script('smde_components');
 
