@@ -33,9 +33,9 @@ function load_static_maker_deploy_extra_basics($static_maker_class)
         'Monolog\Logger' => function (Static_Maker\Deploy_Extra\Option $option) {
             $log = new Logger('SMDE');
 
-            $stream = new StreamHandler(__DIR__ . '/static-maker-deploy-extra.log', Logger::DEBUG);
+            $stream = new StreamHandler(get_home_path() . 'static-maker-deploy-extra.log', Logger::NOTICE);
             if (WP_DEBUG) {
-                $stream = new StreamHandler(__DIR__ . '/static-maker-deploy-extra.log', Logger::NOTICE);
+                $stream = new StreamHandler(get_home_path() . '/static-maker-deploy-extra.log', Logger::DEBUG);
             }
             $log->pushHandler($stream);
 

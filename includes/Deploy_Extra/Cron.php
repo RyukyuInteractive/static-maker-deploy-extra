@@ -2,15 +2,19 @@
 
 namespace Static_Maker\Deploy_Extra;
 
+use Monolog\Logger;
+
 class Cron
 {
     private $db;
     private $rsync;
+    private $log;
 
-    public function __construct(DB $db, Rsync $rsync)
+    public function __construct(DB $db, Rsync $rsync, Logger $log)
     {
         $this->db = $db;
         $this->rsync = $rsync;
+        $this->log = $log;
     }
 
     public function cron_schedule_handler($timestamp)
@@ -18,11 +22,13 @@ class Cron
         $deploy = $this->db->fetch_waiting_deploy_by_timestamp($timestamp);
 
         if (!$deploy) {
+            $this->log->info(__('no deploy found'), ['timestamp' => $timestamp]);
             return;
         }
 
         // update deploy status
         if (!$this->db->update_status($deploy, 'processing')) {
+            $this->log->warning(__('can not update deploy status'), $deploy);
             return;
         }
 
@@ -30,6 +36,8 @@ class Cron
         $this->rsync->sync_remote($timestamp);
 
         $this->db->update_status($deploy, 'completed');
+
+        $this->log->notice(__('deployed'), $deploy);
     }
 
     public function get_cron_schedules()
