@@ -30,9 +30,14 @@ class ComposerStaticInitbe1f16fb8c3dd244321965bd3c1610bb
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
             'PhpParser\\' => 10,
             'PhpDocReader\\' => 13,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
         ),
         'I' => 
         array (
@@ -73,6 +78,10 @@ class ComposerStaticInitbe1f16fb8c3dd244321965bd3c1610bb
         array (
             0 => __DIR__ . '/../..' . '/includes',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -84,6 +93,10 @@ class ComposerStaticInitbe1f16fb8c3dd244321965bd3c1610bb
         'PhpDocReader\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-di/phpdoc-reader/src/PhpDocReader',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Invoker\\' => 
         array (

@@ -7,6 +7,7 @@ $remote_host = $options ? $options['remote_host'] ?? '' : '';
 $remote_user = $options ? $options['remote_user'] ?? '' : '';
 $remote_dir = $options ? $options['remote_dir'] ?? '' : '';
 $remote_ssh_key = $options ? $options['remote_ssh_key'] ?? '' : '';
+$deploy_notify_email = $options ? $options['deploy_notify_email'] ?? '' : '';
 
 ?>
 <div class="wrap">
@@ -60,6 +61,15 @@ $remote_ssh_key = $options ? $options['remote_ssh_key'] ?? '' : '';
 					<label for="<?=STATIC_MAKER_DEPLOY_EXTRA . '-remote-ssh-key'?>">
 						<textarea id="<?=STATIC_MAKER_DEPLOY_EXTRA . '-remote-ssh-key'?>" class="large-text code"
 								  name="<?=STATIC_MAKER_DEPLOY_EXTRA . '[remote_ssh_key]'?>"><?=$crypto_util::decrypt($remote_ssh_key, true)?></textarea>
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<th><?=__('Deploy Notification Email', STATIC_MAKER_DEPLOY_EXTRA)?></th>
+				<td>
+					<label for="<?=STATIC_MAKER_DEPLOY_EXTRA . '-deploy-notify-email'?>">
+						<input type="text" id="<?=STATIC_MAKER_DEPLOY_EXTRA . '-deploy-notify-email'?>" class="large-text code"
+								  name="<?=STATIC_MAKER_DEPLOY_EXTRA . '[deploy_notify_email]'?>" placeholder="admin@example.com" value="<?=$deploy_notify_email?>">
 					</label>
 				</td>
 			</tr>

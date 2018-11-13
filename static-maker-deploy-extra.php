@@ -12,6 +12,11 @@
  * @package         Static_Maker_Deploy_Extra
  */
 
+use Monolog\Handler\FilterHandler;
+use Monolog\Handler\NativeMailerHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/Deploy_Extra/Activation_Deactivation_Hooks.php';
 
@@ -23,7 +28,29 @@ define('STATIC_MAKER_DEPLOY_EXTRA_DEPLOY_DIFF_TABLE_NAME', get_diff_table_name()
 
 function load_static_maker_deploy_extra_basics($static_maker_class)
 {
-    $container = new DI\Container();
+    $builder = new DI\ContainerBuilder();
+    $builder->addDefinitions([
+        'Monolog\Logger' => function (Static_Maker\Deploy_Extra\Option $option) {
+            $log = new Logger('SMDE');
+
+            $stream = new StreamHandler(__DIR__ . '/static-maker-deploy-extra.log', Logger::DEBUG);
+            if (WP_DEBUG) {
+                $stream = new StreamHandler(__DIR__ . '/static-maker-deploy-extra.log', Logger::NOTICE);
+            }
+            $log->pushHandler($stream);
+
+            if ($option->get_notification_email()) {
+                $noticeEmail = new NativeMailerHandler($option->get_notification_email(), __('Notice', STATIC_MAKER_DEPLOY_EXTRA), get_option('admin_email'), Logger::NOTICE);
+                $errorEmail = new NativeMailerHandler($option->get_notification_email(), __('Fatal Error Occurred', STATIC_MAKER_DEPLOY_EXTRA), get_option('admin_email'), Logger::ERROR);
+                $log->pushHandler(new FilterHandler($noticeEmail, [Logger::NOTICE]));
+                $log->pushHandler($errorEmail);
+            }
+
+            return $log;
+        },
+    ]);
+
+    $container = $builder->build();
 
     $static_maker_class->features['rsync'] = false;
 

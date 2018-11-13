@@ -2,6 +2,8 @@
 
 namespace Static_Maker\Deploy_Extra;
 
+use Monolog\Logger;
+
 class Deploy_Extra
 {
     public $db;
@@ -12,6 +14,7 @@ class Deploy_Extra
     public $cron;
     public $revision;
     public $ajax;
+    public $log;
     public $static_maker;
 
     public function __construct(
@@ -23,6 +26,7 @@ class Deploy_Extra
         Cron $cron,
         Revision $revision,
         Ajax $ajax,
+        Logger $log,
         Static_Maker $static_maker
     ) {
         $this->db = $db;
@@ -33,6 +37,7 @@ class Deploy_Extra
         $this->cron = $cron;
         $this->revision = $revision;
         $this->ajax = $ajax;
+        $this->log = $log;
         $this->static_maker = $static_maker;
     }
 
