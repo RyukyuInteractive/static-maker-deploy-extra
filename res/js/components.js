@@ -267,7 +267,7 @@
 					node.appendChild(div)
 
 					var label = document.createElement('label')
-					var text = document.createTextNode('日付')
+					var text = document.createTextNode('Date')
 					var input = document.createElement('input')
 					input.setAttribute('type', 'date')
 					input.setAttribute('name', 'schedule_date')
@@ -276,7 +276,7 @@
 					div.appendChild(label)
 
 					label = document.createElement('label')
-					text = document.createTextNode('時間')
+					text = document.createTextNode('Time')
 					input = document.createElement('input')
 					input.setAttribute('type', 'time')
 					input.setAttribute('name', 'schedule_time')
@@ -287,7 +287,7 @@
 					var button = document.createElement('button')
 					button.setAttribute('type', 'submit')
 					button.classList.add('button', 'button-primary')
-					button.textContent = 'デプロイ'
+					button.textContent = 'Deploy'
 
 					button.addEventListener('click', function(e) {
 						e.preventDefault()
