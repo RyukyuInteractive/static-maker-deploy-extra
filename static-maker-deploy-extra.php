@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name:     Static Maker Deploy Extra
- * Plugin URI:      PLUGIN SITE HERE
- * Description:     PLUGIN DESCRIPTION HERE
- * Author:          YOUR NAME HERE
- * Author URI:      YOUR SITE HERE
+ * Plugin URI:      https://github.com/ameyamashiro/static-maker-deploy-extra
+ * Description:     Static Maker addon for manual deploying
+ * Author:          ameyamashiro
+ * Author URI:      https://github.com/ameyamashiro
  * Text Domain:     static-maker-deploy-extra
  * Domain Path:     /languages
  * Version:         0.1.0
