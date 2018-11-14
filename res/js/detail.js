@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+	
 	var getParams = location.search.split("&").reduce(function(a, c) {
 		console.log(a, c);
 		var s = c.split("=");
