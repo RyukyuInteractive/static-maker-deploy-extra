@@ -1,60 +1,91 @@
-document.addEventListener("DOMContentLoaded", function() {
-	
-	var getParams = location.search.split("&").reduce(function(a, c) {
-		console.log(a, c);
-		var s = c.split("=");
-		a[s[0]] = s[1];
-		return a;
-	}, {});
-
-	var setState = (function() {
-		var state = {};
-
-		return function(newState) {
-			// merge state
-			state = Object.keys(newState).reduce(function(a, c) {
-				a[c] = newState[c];
-				return a;
-			}, state);
-
-			applyState(state);
-		};
-	})();
-
-	var applyState = function(state) {
-		console.log(state);
-
-		var deployActionWrapper = document.querySelector(
-			".smde-deploy-action-wrapper"
-		);
-
-		var onDeploy = function(data) {
-			var requestData = scheduleDeployData;
-
-			jQuery
-				.post(requestData.url, {
-					action: requestData.action,
-					date: data.date,
-					time: data.time,
-					deploy: getParams["deploy"]
-				})
-				.done(function() {
-					alert("succeeded");
-					location.reload();
-				})
-				.fail(function(e) {
-					alert(e.responseText);
-				});
-		};
-
-		if (deployActionWrapper) {
-			deployActionWrapper.appendChild(
-				smdeComponents
-					.DeployScheduleButtonComponent(setState, state)
-					.create(onDeploy)
-			);
+document.addEventListener('DOMContentLoaded', function() {
+	const getMessage = msg => {
+		if (!window.DeployExtraMessages) {
+			return msg
 		}
-	};
+		return window.DeployExtraMessages[msg] || msg
+	}
 
-	setState({});
-});
+	const getCheckedFilesFromPHP = () =>
+		window.currentDeployDiffData &&
+		window.currentDeployDiffData.reduce(
+			(a, c) => a.set(c.file_path, c),
+			new Map()
+		)
+
+	const getDeployFileExistsFromPHP = () =>
+		window.currentDeployData && window.currentDeployData.exists === '1'
+			? true
+			: false
+
+	const getDeployTypeFromPHP = () =>
+		window.currentDeployData ? window.currentDeployData.type : null
+
+	const h = hyperapp.h
+	const app = hyperapp.app
+
+	const components = window.smdeComponents
+
+	const defaultState = {
+		scheduleDate: null,
+		scheduleTime: null,
+		checkedFiles: new Map(),
+		processing: false,
+
+		// objects passed from php
+		checkedFiles: getCheckedFilesFromPHP(),
+		deployFileExists: getDeployFileExistsFromPHP(),
+		deployId: window.currentDeployData ? window.currentDeployData.id : null,
+		deployType: getDeployTypeFromPHP(),
+		scheduleDeployData: window.scheduleDeployData,
+		partialScheduleDeployData: window.partialScheduleDeployData
+	}
+
+	const view = (state, actions) => {
+		console.log(state)
+
+		const existFiles = state.deployFileExists
+		return h('div', {}, [
+			components.Loader,
+			existFiles ? components.DeployScheduleSelector : ''
+		])
+	}
+
+	app(
+		defaultState,
+		window.smdeActions,
+		view,
+		document.querySelector('.smde-deploy-app')
+	)
+
+	Array.prototype.forEach.call(
+		document.querySelectorAll('.smde-unschedule-deploy'),
+		function(e) {
+			e.addEventListener('click', function(e) {
+				e.preventDefault()
+
+				const timestamp = e.target.dataset.timestamp
+
+				if (!timestamp) {
+					alert(getMessage('no timestamp'))
+					return
+				}
+
+				const requestData = unscheduleDeployData
+
+				jQuery
+					.post(requestData.url, {
+						action: requestData.action,
+						timestamp: timestamp
+					})
+					.done(function() {
+						alert(getMessage('succeeded'))
+						e.target.parentNode.remove()
+					})
+					.fail(function() {
+						alert(getMessage('failed'))
+					})
+			})
+		}
+	)
+})

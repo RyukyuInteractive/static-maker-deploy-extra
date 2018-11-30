@@ -64,15 +64,15 @@ class Diff
 
                     if (!$time_diff || !$size_diff) {
                         array_push($diffs, [
-                            'file' => $rev_key,
-                            'status' => 'modified',
+                            'file_path' => $rev_key,
+                            'action' => 'modified',
                         ]);
                     }
 
                 } else {
                     array_push($diffs, [
-                        'file' => $rev_key,
-                        'status' => 'added',
+                        'file_path' => $rev_key,
+                        'action' => 'added',
                     ]);
                 }
             }
@@ -86,8 +86,8 @@ class Diff
 
                 if (!isset($rev_list[$prd_key])) {
                     array_push($diffs, [
-                        'file' => $prd_key,
-                        'status' => 'deleted',
+                        'file_path' => $prd_key,
+                        'action' => 'deleted',
                     ]);
                 }
             }

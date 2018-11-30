@@ -31,12 +31,56 @@ final class DiffListOfTest extends TestCase
 
         $expected = [
             [
-                'file' => '/second',
-                'status' => 'deleted',
+                'file_path' => '/second',
+                'action' => 'deleted',
             ],
         ];
 
         $diff_out = $diff->get_diff_list('case' . $rev_case);
+        $this->assertEquals($expected, $diff_out);
+    }
+
+    public function testIsDiffCorrectFromCase2ToCase1(): void
+    {
+        $rev_case = '2';
+        $prd_case = '1';
+
+        $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
+
+        $expected = [
+            [
+                'file_path' => '/second',
+                'action' => 'added',
+            ],
+        ];
+
+        $diff_out = $diff->get_diff_list('case' . $rev_case);
+        $this->assertEquals($expected, $diff_out);
+    }
+
+    public function testIsDiffCorrectFromCase2ToCase3(): void
+    {
+        $rev_case = '2';
+        $prd_case = '3';
+
+        $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
+
+        $expected = [
+            [
+                'file_path' => '/first',
+                'action' => 'added',
+            ],
+            [
+                'file_path' => '/second',
+                'action' => 'modified',
+            ],
+            [
+                'file_path' => '/third',
+                'action' => 'deleted',
+            ],
+        ];
+        $diff_out = $diff->get_diff_list('case' . $rev_case);
+
         $this->assertEquals($expected, $diff_out);
     }
 
@@ -49,16 +93,16 @@ final class DiffListOfTest extends TestCase
 
         $expected = [
             [
-                'file' => '/third',
-                'status' => 'added',
+                'file_path' => '/third',
+                'action' => 'added',
             ],
             [
-                'file' => '/second',
-                'status' => 'modified',
+                'file_path' => '/second',
+                'action' => 'modified',
             ],
             [
-                'file' => '/first',
-                'status' => 'deleted',
+                'file_path' => '/first',
+                'action' => 'deleted',
             ],
         ];
         $diff_out = $diff->get_diff_list('case' . $rev_case);
@@ -66,21 +110,25 @@ final class DiffListOfTest extends TestCase
         $this->assertEquals($expected, $diff_out);
     }
 
-    public function testIsDiffCorrectFromCase3ToCase4(): void
+    public function testIsDiffCorrectFromCase3ToCase1(): void
     {
         $rev_case = '3';
-        $prd_case = '4';
+        $prd_case = '1';
 
         $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
 
         $expected = [
             [
-                'file' => '/third',
-                'status' => 'added',
+                'file_path' => '/third',
+                'action' => 'added',
             ],
             [
-                'file' => '/second',
-                'status' => 'added',
+                'file_path' => '/second',
+                'action' => 'added',
+            ],
+            [
+                'file_path' => '/first',
+                'action' => 'deleted',
             ],
         ];
         $diff_out = $diff->get_diff_list('case' . $rev_case);
@@ -88,21 +136,25 @@ final class DiffListOfTest extends TestCase
         $this->assertEquals($expected, $diff_out);
     }
 
-    public function testIsDiffCorrectFromCase4ToCase3(): void
+    public function testIsDiffCorrectFromCase1ToCase3(): void
     {
-        $rev_case = '4';
+        $rev_case = '1';
         $prd_case = '3';
 
         $diff = $this->get_diff_instance_of_specific_cases($rev_case, $prd_case);
 
         $expected = [
             [
-                'file' => '/third',
-                'status' => 'deleted',
+                'file_path' => '/first',
+                'action' => 'added',
             ],
             [
-                'file' => '/second',
-                'status' => 'deleted',
+                'file_path' => '/third',
+                'action' => 'deleted',
+            ],
+            [
+                'file_path' => '/second',
+                'action' => 'deleted',
             ],
         ];
         $diff_out = $diff->get_diff_list('case' . $rev_case);

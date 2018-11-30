@@ -19,6 +19,8 @@ class Cron
 
     public function cron_schedule_handler($timestamp)
     {
+        $this->log->info(__('cron_schedule_handler'), ['timestamp' => $timestamp]);
+
         $deploy = $this->db->fetch_waiting_deploy_by_timestamp($timestamp);
 
         if (!$deploy) {
@@ -33,11 +35,20 @@ class Cron
         }
 
         // process deploy
-        $this->rsync->sync_remote($timestamp);
+        $ret = $this->rsync->sync_remote($timestamp);
 
-        $this->db->update_status($deploy, 'completed');
+        $output_data = array_merge($deploy, [
+            'rsync_code' => $ret['code'],
+            'rsync_output' => $ret['output'],
+        ]);
 
-        $this->log->notice(__('deployed'), $deploy);
+        if ($ret['code'] !== 0) {
+            $this->db->update_status($deploy, 'failed');
+            $this->log->error(__('deployed', STATIC_MAKER_DEPLOY_EXTRA), $output_data);
+        } else {
+            $this->db->update_status($deploy, 'completed');
+            $this->log->notice(__('deployed', STATIC_MAKER_DEPLOY_EXTRA), $output_data);
+        }
     }
 
     public function get_cron_schedules()

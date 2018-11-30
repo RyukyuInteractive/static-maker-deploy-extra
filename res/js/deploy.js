@@ -1,170 +1,84 @@
 document.addEventListener('DOMContentLoaded', function() {
-	var h = hyperapp.h
-	var app = hyperapp.app
-
-	var compoments = window.smdeComponents
-
-	var setState = (function() {
-		var state = {
-			deployType: 'whole',
-			partialConfirm: false,
-			showDiff: false,
-			diffData: [],
-			checkedFiles: {}
+	const getMessage = msg => {
+		if (!window.DeployExtraMessages) {
+			return msg
 		}
-
-		return function(newState) {
-			// merge state
-			state = Object.keys(newState).reduce(function(a, c) {
-				a[c] = newState[c]
-				return a
-			}, state)
-
-			applyState(state)
-		}
-	})()
-
-	/**
-	 * called every time the state is updated
-	 */
-	var applyState = function(state) {
-		console.log(state)
-
-		// render components
-
-		// fetching the diff button component
-		if (state.deployType === 'partial') {
-			document
-				.querySelector('.diff-actions')
-				.appendChild(
-					smdeComponents
-						.DiffActionsComponent(setState, state)
-						.create()
-				)
-		} else {
-			smdeComponents.DiffActionsComponent(setState, state).remove()
-		}
-
-		document
-			.querySelector('.diff-table-output')
-			.appendChild(
-				smdeComponents.DiffTableComponent(setState, state).create()
-			)
-		document
-			.querySelector('.diff-confirm-output')
-			.appendChild(
-				smdeComponents.ConfirmListComponent(setState, state).create()
-			)
-		document
-			.querySelector('.deploy-type-buttons')
-			.appendChild(
-				smdeComponents
-					.DeployTypeRadioComponent(setState, state)
-					.create()
-			)
+		return window.DeployExtraMessages[msg] || msg
 	}
 
-	Array.prototype.forEach.call(
-		document.querySelectorAll('.smde-unschedule-deploy'),
-		function(e) {
-			e.addEventListener('click', function(e) {
-				e.preventDefault()
+	const h = hyperapp.h
+	const app = hyperapp.app
 
-				var timestamp = e.target.dataset.timestamp
-
-				if (!timestamp) {
-					alert('no timestamp')
-					return
-				}
-
-				var requestData = unscheduleDeployData
-
-				jQuery
-					.post(requestData.url, {
-						action: requestData.action,
-						timestamp: timestamp
-					})
-					.done(function() {
-						alert('succeeded')
-						e.target.parentNode.remove()
-					})
-					.fail(function() {
-						alert('failed')
-					})
-			})
-		}
-	)
+	const components = window.smdeComponents
 
 	const defaultState = {
+		partialView: 'file-list',
+
+		isScheduleDeploy: false,
 		scheduleDate: null,
 		scheduleTime: null,
-		checkedFiles: [],
+		checkedFiles: new Map(),
+		processing: false,
 		deployType: 'whole',
 		partialConfirm: false,
+		diffData: [],
 
 		// objects passed from php
-		scheduleDeployData,
-		partialScheduleDeployData
+		scheduleDeployData: window.scheduleDeployData,
+		partialScheduleDeployData: window.partialScheduleDeployData
 	}
 
-	// TODO: hyperapp でのコンポーネントベースの条件分岐をどうするか
-
-	const actions = {
-		setScheduleDate: value => state =>
-			Object.assign({}, state, {
-				scheduleDate: value
-			}),
-		setScheduleTime: value => state =>
-			Object.assign({}, state, {
-				scheduleTime: value
-			}),
-		requestDeploy: (date, time) => async (state, actions) => {
-			date = date || state.scheduleDate
-			time = time || state.scheduleTime
-
-			if (!date || !time) {
-				throw new Error('Missing Required Arguments')
-			}
-
-			const requestData =
-				state.deployType === 'partial'
-					? state.partialScheduleDeployData
-					: state.scheduleDeployData
-
-			jQuery
-				.post(requestData.url, {
-					action: requestData.action,
-					files: state.checkedFiles,
-					date,
-					time
-				})
-				.done(() => {
-					alert('succeeded')
-					location.reload()
-				})
-				.fail(e => {
-					alert(e.responseText)
-				})
+	const wholeDeployContainer = (state, actions) => {
+		if (state.deployType !== 'whole') {
+			return false
 		}
+
+		return [components.DeployScheduleSelector]
 	}
 
-	var renderDeployScheduleSelector = (state, actions) => {
-		return state.deployType === 'whole' || state.partialConfirm
-			? [
-					compoments.HDeployScheduleSelector,
-					Object.assign(state, actions)
-			  ]
-			: []
+	const partialDeployContainer = (state, actions) => {
+		if (state.deployType !== 'partial') {
+			return false
+		}
+
+		const isFileList = state.partialView === 'file-list'
+		const isConfirm = state.partialView === 'confirm'
+		const hasCheckedList = !!state.checkedFiles.size
+		const hasDiffList = !!state.diffData.length
+
+		return [
+			isFileList && components.GetProductionDiffButton,
+			isFileList && hasDiffList && components.DiffListTable,
+			isFileList &&
+				hasDiffList &&
+				components.DiffListConfirmButton({
+					onclick: actions.setPartialView
+				}),
+			isConfirm && components.ConfirmList,
+			isConfirm &&
+				components.DiffListConfirmBackButton({
+					onclick: actions.setPartialView
+				}),
+			isConfirm && hasCheckedList && components.DeployScheduleSelector
+		]
 	}
 
-	var view = (state, actions) => {
+	const view = (state, actions) => {
 		console.log(state)
 
-		return h('div', {}, [renderDeployScheduleSelector(state, actions)])
+		return h('div', {}, [
+			components.Loader,
+			components.DeployTypeRadio,
+
+			wholeDeployContainer(state, actions),
+			partialDeployContainer(state, actions)
+		])
 	}
 
-	app(defaultState, actions, view, document.querySelector('.smde-deploy-app'))
-
-	// initial render
-	setState({})
+	app(
+		defaultState,
+		window.smdeActions,
+		view,
+		document.querySelector('.smde-deploy-app')
+	)
 })

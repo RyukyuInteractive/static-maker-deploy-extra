@@ -69,7 +69,6 @@ class File
             $src = realpath("$src_base/$file");
 
             $dst_pathinfo = pathinfo("$dst_base/$file");
-            var_dump($dst_pathinfo);
             $dst_dir = realpath($dst_pathinfo['dirname']);
 
             if (!$dst_dir) {

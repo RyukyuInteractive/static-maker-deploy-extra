@@ -31,14 +31,14 @@ class DB
 
         // save files data
         $deploy_id = $wpdb->insert_id;
-        $diff_table = $this->diff_table_name;
+        $diff_table = $this->get_diff_table_name();
 
         $query = 'INSERT INTO ' . $diff_table . ' (foreign_id, file_path, action) VALUES ';
         $place_holders = [];
         $values = [];
         foreach ($files as $file) {
-            array_push($values, $deploy_id, $file['file'], $file['status']);
-            array_push($place_holders, " ('%d', '%s', '%s')");
+            array_push($values, intval($deploy_id), $file['file_path'], $file['action']);
+            array_push($place_holders, " (%d, '%s', '%s')");
         }
         $query .= implode(', ', $place_holders);
         return $wpdb->query($wpdb->prepare($query, $values));
@@ -53,7 +53,6 @@ class DB
         return $wpdb->update($table, ['status' => $status], ['id' => $id]) === 1;
     }
 
-    // TODO: 使わなければ消す
     public function update_status_by_timestamp($timestamp, $status)
     {
         global $wpdb;
@@ -90,6 +89,13 @@ class DB
         return $wpdb->get_row($wpdb->prepare($sql, $id), ARRAY_A);
     }
 
+    public function fetch_timestamp_by_id($id)
+    {
+        global $wpdb;
+        $sql = 'SELECT timestamp FROM ' . $this->get_list_table_name() . ' WHERE id = %d';
+        return $wpdb->get_var($wpdb->prepare($sql, [$id]));
+    }
+
     public function fetch_deploy_files($opts)
     {
         global $wpdb;
@@ -113,7 +119,7 @@ class DB
             }
         }
 
-        $query = "SELECT * FROM $this->diff_table_name WHERE foreign_id = %d";
+        $query = 'SELECT * FROM ' . $this->get_diff_table_name() . ' WHERE foreign_id = %d';
 
         if ($search_queries) {
             $query .= ' AND ' . implode(' OR ', $search_queries);
@@ -178,16 +184,17 @@ class DB
         return $wpdb->get_var('SELECT COUNT(*) FROM ' . $this->get_list_table_name() . ' WHERE deleted = 0');
     }
 
+    public function fetch_partial_deploy_file_list($deploy_id)
+    {
+        global $wpdb;
+        $query = 'SELECT file_path, action FROM ' . $this->get_diff_table_name() . ' WHERE foreign_id = %d';
+        $query = $wpdb->prepare($query, $deploy_id);
+        return $wpdb->get_results($query, ARRAY_A);
+    }
+
     public function is_valid_for_order($name)
     {
         return strtolower($name) === 'asc' || strtolower($name) === 'desc';
-    }
-
-    public function fetch_timestamp_by_id($id)
-    {
-        global $wpdb;
-        $sql = 'SELECT timestamp FROM ' . $this->get_list_table_name() . ' WHERE id = %d';
-        return $wpdb->get_var($wpdb->prepare($sql, [$id]));
     }
 
     public function soft_delete_deploy_by_ids($ids)

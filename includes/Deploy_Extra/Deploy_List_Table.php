@@ -30,12 +30,12 @@ class Deploy_List_Table extends WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />',
-            'id' => 'ID',
-            'date' => 'Revision Date',
-            'created_at' => 'Created At',
-            'exists' => 'File Existance',
-            'type' => 'Type',
-            'status' => 'Status',
+            'id' => __('ID', STATIC_MAKER_DEPLOY_EXTRA),
+            'date' => __('Revision Date', STATIC_MAKER_DEPLOY_EXTRA),
+            'created_at' => __('Created At', STATIC_MAKER_DEPLOY_EXTRA),
+            'exists' => __('File Existance', STATIC_MAKER_DEPLOY_EXTRA),
+            'type' => __('Type', STATIC_MAKER_DEPLOY_EXTRA),
+            'status' => __('Status', STATIC_MAKER_DEPLOY_EXTRA),
         );
         return $columns;
     }
@@ -80,10 +80,34 @@ class Deploy_List_Table extends WP_List_Table
         switch ($column_name) {
             case 'id':
             case 'date':
-            case 'type':
-            case 'status':
             case 'created_at':
-                return $item[$column_name];
+                return __($item[$column_name], STATIC_MAKER_DEPLOY_EXTRA);
+            case 'type':
+                if ($item[$column_name] === 'whole') {
+                    return __('whole', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                if ($item[$column_name] === 'partial') {
+                    return __('partial', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                return __($item[$column_name], STATIC_MAKER_DEPLOY_EXTRA);
+            case 'status':
+                // lines for gettext
+                if ($item[$column_name] === 'canceled') {
+                    return __('canceled', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                if ($item[$column_name] === 'completed') {
+                    return __('completed', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                if ($item[$column_name] === 'processing') {
+                    return __('processing', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                if ($item[$column_name] === 'waiting') {
+                    return __('waiting', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                if ($item[$column_name] === 'deleted') {
+                    return __('deleted', STATIC_MAKER_DEPLOY_EXTRA);
+                }
+                return __($item[$column_name], STATIC_MAKER_DEPLOY_EXTRA);
             default:
                 return print_r($item, true); //Show the whole array for troubleshooting purposes
         }
@@ -122,7 +146,7 @@ class Deploy_List_Table extends WP_List_Table
         if ($this->current_action() === 'delete' && isset($_POST['deploy'])) {
             $this->delete_deploy_by_ids($_POST['deploy']);
 
-            $message = __('Deleted ', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
+            $message = __('Deleted', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
             echo '<div id="message" class="updated notice is-dismissible">';
             echo '<p>' . $message . '</p>';
             echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">この通知を非表示にする</span></button>';
@@ -137,7 +161,14 @@ class Deploy_List_Table extends WP_List_Table
         }
 
         foreach ($ids as $id) {
-            $timestamp = $this->db->fetch_timestamp_by_id($id);
+            $deploy = $this->db->fetch_deploy($id);
+            $timestamp = $deploy['timestamp'];
+
+            if ($deploy['status'] === 'waiting') {
+                // remove the timestamp from the cron queue
+                wp_unschedule_event($timestamp, 'smde_schedule_handler', [intval($timestamp)]);
+            }
+
             if ($this->path->exists_revision($timestamp)) {
                 $this->file->recurse_rm($this->path->get_revision_path($timestamp));
             }

@@ -108,23 +108,39 @@ class Revision
         return true;
     }
 
-    public function make_revision_from_existing($timestamp)
+    public function make_revision_from_existing($type, $from_timestamp, $to_timestamp, $files = [])
     {
-        if (!$timestamp) {
+        if (!$from_timestamp) {
             return false;
         }
 
-        if (!$this->path->exists_revision($timestamp)) {
+        if (!$this->path->exists_revision($from_timestamp)) {
             return false;
         }
 
-        $this->db->insert_partial_deploy([
-            'date' => date('Y-m-d H:i:s', $timestamp),
-            'timestamp' => $timestamp,
-            'type' => 'whole',
-            'status' => 'waiting',
-        ], $files);
+        // copy files to new revision dir
+        $from_path = $this->path->get_revision_path($from_timestamp);
+        $to_path = $this->path->get_revision_path($to_timestamp);
 
-        return true;
+        if (!$this->file->recurse_copy($from_path, $to_path)) {
+            return false;
+        }
+
+        if ($type === 'whole') {
+            return $this->db->insert_whole_deploy([
+                'date' => date('Y-m-d H:i:s', $to_timestamp),
+                'timestamp' => $to_timestamp,
+                'type' => 'whole',
+                'status' => 'waiting',
+            ]);
+        } else if ($type === 'partial') {
+            return $this->db->insert_partial_deploy([
+                'date' => date('Y-m-d H:i:s', $to_timestamp),
+                'timestamp' => $to_timestamp,
+                'type' => 'partial',
+                'status' => 'waiting',
+            ], $files);
+        }
+        return false;
     }
 }

@@ -40,14 +40,17 @@ class Rsync
 
         $rsync_command = "rsync $options $revision_path $user@$host:$dst 2>&1";
 
-        $output = shell_exec($rsync_command);
+        exec($rsync_command, $out, $code);
 
 //        file_put_contents(ABSPATH . '/hoge', $rsync_command);
         //        file_put_contents(ABSPATH . '/output', $output);
 
         fclose($temp);
 
-        return $output;
+        return [
+            'output' => $out,
+            'code' => $code,
+        ];
     }
 
     public function download_production_data($dry_run = false)
@@ -82,12 +85,15 @@ class Rsync
             $dst .= '/';
         }
 
-        $rsync_command = "rsync $options $user@$host:$dst $local_path";
+        $rsync_command = "rsync $options $user@$host:$dst $local_path 2>&1";
 
-        $output = shell_exec($rsync_command);
+        exec($rsync_command, $out, $code);
 
         fclose($temp);
 
-        return $output;
+        return [
+            'output' => $out,
+            'code' => $code,
+        ];
     }
 }

@@ -1,0 +1,76 @@
+#smde-deploy .deploy-button {
+	display: block;
+}
+
+#smde-deploy .deploy-type-radio-wrapper {
+	width: 100%;
+	max-width: 500px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.2em;
+	font-weight: bold;
+	margin: 1.5em 0;
+}
+
+#smde-deploy .schedule-deploy-date-input {
+	margin: 1em 0 1em 50px;
+	display: inline-block;
+}
+
+#smde-deploy .schedule-deploy-date-input [type='date'] {
+	margin-left: 0.5em;
+}
+
+#smde-deploy .schedule-deploy-time-input {
+	margin-left: 1em;
+	padding-right: 1em;
+	display: inline-block;
+}
+
+#smde-deploy .schedule-deploy-time-input [type='time'] {
+	margin-left: 0.5em;
+}
+
+#smde-deploy .compare-diff-button-wrapper {
+	margin: 1.5em 0;
+}
+
+#smde-deploy .partial-table-actions {
+	margin: 1.5em 0;
+}
+
+#smde-deploy .queue-list-title {
+	margin-top: 3em;
+}
+
+.smde-loader-wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.smde-loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	margin: 20px 20px auto auto;
+	border: 4px solid #f3f3f3; /* Light grey */
+	border-top: 4px solid #3498db; /* Blue */
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	animation: smde-spin 2s linear infinite;
+}
+
+@keyframes smde-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

@@ -95,7 +95,7 @@ class Deploy_Files_List_Table extends WP_List_Table
     private function process_bulk_action()
     {
         if ('delete' === $this->current_action() && isset($_POST['deploy'])) {
-            $message = __('Deleted ', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
+            $message = __('Deleted', STATIC_MAKER_DEPLOY_EXTRA) . ' ' . implode(', ', $_POST['deploy']);
             echo '<div id="message" class="updated notice is-dismissible">';
             echo '<p>' . $message . '</p>';
             echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">この通知を非表示にする</span></button>';

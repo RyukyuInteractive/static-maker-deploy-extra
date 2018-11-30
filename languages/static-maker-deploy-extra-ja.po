@@ -1,0 +1,426 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-26 14:50+0900\n"
+"PO-Revision-Date: 2018-11-26 14:53+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:63
+#: includes/Deploy_Extra/Deploy_Extra.php:64
+#: includes/Deploy_Extra/Deploy_Extra.php:105
+msgid "Deploy"
+msgstr "デプロイ"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:72
+#: includes/Deploy_Extra/Deploy_Extra.php:73
+msgid "Deploy List"
+msgstr "デプロイ一覧"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:81
+#: includes/Deploy_Extra/Deploy_Extra.php:82
+msgid "Deploy Settings"
+msgstr "デプロイ設定"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:102
+msgid "Schedule Deploy"
+msgstr "デプロイ予約日時を指定"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:103 views/admin-display-detail.php:20
+msgid "Date"
+msgstr "日付"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:104
+msgid "Time"
+msgstr "時間"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:106
+msgid "Deploy All Files"
+msgstr "全てを本番へ反映"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:107
+msgid "Specify Files to Deploy"
+msgstr "本番へ反映するファイルを指定"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:108
+msgid "Compare Diff"
+msgstr "差分を読み込む"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:109
+msgid "Next"
+msgstr "次へ"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:110
+msgid "Back"
+msgstr "戻る"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:111
+msgid "succeeded"
+msgstr "成功しました"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:112
+msgid "failed"
+msgstr "失敗しました"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:113
+msgid "no timestamp"
+msgstr "タイムスタンプがありません"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:114
+#: includes/Deploy_Extra/Deploy_List_Table.php:38
+msgid "Status"
+msgstr "ステータス"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:115
+msgid "modified"
+msgstr "変更"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:116
+msgid "added"
+msgstr "追加"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:117
+#: includes/Deploy_Extra/Deploy_List_Table.php:108
+msgid "deleted"
+msgstr "削除"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:118
+msgid "Reserve"
+msgstr "デプロイ予約"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:119
+msgid "Reserve at current time"
+msgstr "現在時刻で予約"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:120
+msgid "Missing Required Arguments"
+msgstr "必要な引数が不足しています"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:121
+msgid "The new deployment has been reserved"
+msgstr "デプロイ予約しました"
+
+#: includes/Deploy_Extra/Deploy_Extra.php:122
+msgid "The production is latest"
+msgstr "本番環境は最新の状態です"
+
+#: includes/Deploy_Extra/Ajax.php:48 includes/Deploy_Extra/Ajax.php:78
+msgid "please set required parameters"
+msgstr "必要なパラメータを設定してください"
+
+#: includes/Deploy_Extra/Ajax.php:54 includes/Deploy_Extra/Ajax.php:100
+#: includes/Deploy_Extra/Ajax.php:107 includes/Deploy_Extra/Ajax.php:112
+msgid "failed to create a revision"
+msgstr "リビジョンの作成に失敗しました"
+
+#: includes/Deploy_Extra/Ajax.php:83
+msgid "Another deployment is running or already reserved"
+msgstr "デプロイ実行中または、すでにデプロイ予約が保存されています"
+
+#: includes/Deploy_Extra/Ajax.php:95
+msgid "the deploy of the specified timestamp doesn't exist"
+msgstr "指定したタイムスタンプのデプロイは存在しません"
+
+#: includes/Deploy_Extra/Ajax.php:128
+msgid "please set timestamp to unschedule"
+msgstr "予約を取り消す日時を指定してください"
+
+#: includes/Deploy_Extra/Ajax.php:149 includes/Deploy_Extra/Ajax.php:165
+msgid "Rsync from production failed"
+msgstr ""
+
+#: includes/Deploy_Extra/Ajax.php:153 includes/Deploy_Extra/Ajax.php:169
+msgid "failed to download"
+msgstr "ダウンロードに失敗しました"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:33
+#: static-maker-deploy-extra.php:55
+msgid "ID"
+msgstr ""
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:34
+msgid "Revision Date"
+msgstr "デプロイ予約日時"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:35
+msgid "Created At"
+msgstr "作成日時"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:36
+msgid "File Existance"
+msgstr "ファイルの生存状態"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:37
+#: static-maker-deploy-extra.php:59
+msgid "Type"
+msgstr "タイプ"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:87
+msgid "whole"
+msgstr "全ファイル"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:90
+msgid "partial"
+msgstr "ファイル別"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:96
+msgid "canceled"
+msgstr "キャンセル"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:99
+msgid "completed"
+msgstr "完了"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:102
+msgid "processing"
+msgstr "処理中"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:105
+msgid "waiting"
+msgstr "処理待ち"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:118
+msgid "Yes"
+msgstr "はい"
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:118
+msgid "-"
+msgstr ""
+
+#: includes/Deploy_Extra/Deploy_List_Table.php:149
+#: includes/Deploy_Extra/Deploy_Files_List_Table.php:98
+msgid "Deleted"
+msgstr "削除しました"
+
+#: includes/Deploy_Extra/Cron.php:25
+msgid "no deploy found"
+msgstr "デプロイが見つかりません"
+
+#: includes/Deploy_Extra/Cron.php:31
+msgid "can not update deploy status"
+msgstr "デプロイのステータスが更新できませんでした"
+
+#: includes/Deploy_Extra/Cron.php:45 includes/Deploy_Extra/Cron.php:48
+msgid "deployed"
+msgstr "本番適用済み"
+
+#: includes/class-wp-list-table.php:156
+msgid "List View"
+msgstr ""
+
+#: includes/class-wp-list-table.php:157
+msgid "Excerpt View"
+msgstr ""
+
+#: includes/class-wp-list-table.php:329
+msgid "No items found."
+msgstr ""
+
+#: includes/class-wp-list-table.php:467
+msgid "Select bulk action"
+msgstr ""
+
+#: includes/class-wp-list-table.php:469
+msgid "Bulk Actions"
+msgstr ""
+
+#: includes/class-wp-list-table.php:479
+msgid "Apply"
+msgstr ""
+
+#: includes/class-wp-list-table.php:533 includes/class-wp-list-table.php:1348
+msgid "Show more details"
+msgstr ""
+
+#: includes/class-wp-list-table.php:597
+msgid "Filter by date"
+msgstr ""
+
+#: includes/class-wp-list-table.php:599
+msgid "All dates"
+msgstr ""
+
+#: includes/class-wp-list-table.php:613
+#, php-format
+msgid "%1$s %2$d"
+msgstr ""
+
+#: includes/class-wp-list-table.php:674 includes/class-wp-list-table.php:686
+#: includes/class-wp-list-table.php:699
+msgid "No comments"
+msgstr ""
+
+#: includes/class-wp-list-table.php:686
+msgid "No approved comments"
+msgstr ""
+
+#: includes/class-wp-list-table.php:699
+msgid "No pending comments"
+msgstr ""
+
+#: includes/class-wp-list-table.php:814
+msgid "First page"
+msgstr ""
+
+#: includes/class-wp-list-table.php:824
+msgid "Previous page"
+msgstr ""
+
+#: includes/class-wp-list-table.php:831 includes/class-wp-list-table.php:834
+msgid "Current Page"
+msgstr ""
+
+#: includes/class-wp-list-table.php:840
+#, php-format
+msgid "%1$s of %2$s"
+msgstr ""
+
+#: includes/class-wp-list-table.php:847
+msgid "Next page"
+msgstr ""
+
+#: includes/class-wp-list-table.php:857
+msgid "Last page"
+msgstr ""
+
+#: includes/class-wp-list-table.php:1087
+msgid "Select All"
+msgstr ""
+
+#: views/admin-display-main.php:7 views/admin-display-list.php:37
+msgid "Please set rsync information from Deploy Settings"
+msgstr ""
+
+#: views/admin-display-list.php:10
+msgid "Schedule List"
+msgstr "スケジュール一覧"
+
+#: views/admin-display-list.php:13
+msgid "List"
+msgstr "リスト"
+
+#: views/admin-display-list.php:21
+msgid "Queue List"
+msgstr "処理待ちリスト"
+
+#: views/admin-display-list.php:22
+msgid "Now"
+msgstr "現在時刻"
+
+#: views/admin-display-list.php:25
+msgid "There is no waiting deploy"
+msgstr "処理待ちのデプロイはありません"
+
+#: views/admin-display-configure.php:27
+msgid "Remote Host"
+msgstr "リモートホスト"
+
+#: views/admin-display-configure.php:32
+msgid "ip, hostname etc.."
+msgstr "IP, ホスト名, etc."
+
+#: views/admin-display-configure.php:38
+msgid "Remote User"
+msgstr "ユーザー名"
+
+#: views/admin-display-configure.php:43
+msgid "ec2-user, centos etc..."
+msgstr ""
+
+#: views/admin-display-configure.php:49
+msgid "Remote Directory"
+msgstr "出力先ディレクトリ"
+
+#: views/admin-display-configure.php:54
+msgid "/var/www/html etc..."
+msgstr ""
+
+#: views/admin-display-configure.php:59
+msgid "SSH Private Key"
+msgstr "SSH秘密鍵"
+
+#: views/admin-display-configure.php:68
+msgid "Notification Email"
+msgstr "通知メールアドレス"
+
+#: views/admin-display-configure.php:74
+msgid "if you specify multiple emails, use comma to separate them"
+msgstr "複数のメールアドレスを指定する場合はカンマ(,)区切りで入力します"
+
+#: views/admin-display-configure.php:78
+msgid "Notification Subject"
+msgstr "通知の件名"
+
+#: views/admin-display-configure.php:84
+msgid "use %subject% to insert a predefined subject"
+msgstr "標準の件名を挿入する場合は %subject% を利用してください"
+
+#: views/admin-display-configure.php:89
+msgid "Save"
+msgstr "保存"
+
+#: views/admin-display-detail.php:16
+msgid "Deploy Detail"
+msgstr "デプロイ詳細"
+
+#: views/admin-display-detail.php:19
+msgid "Deploy Info"
+msgstr "デプロイ情報"
+
+#: views/admin-display-detail.php:21 static-maker-deploy-extra.php:58
+msgid "Timestamp"
+msgstr "タイムスタンプ"
+
+#: views/admin-display-detail.php:22
+msgid "Deploy ID"
+msgstr "デプロイID"
+
+#: views/admin-display-detail.php:27
+msgid "Files"
+msgstr "ファイル"
+
+#: static-maker-deploy-extra.php:51
+msgid "Notice"
+msgstr ""
+
+#: static-maker-deploy-extra.php:52
+msgid "Fatal Error Occurred"
+msgstr "重大なエラーが発生しました"
+
+#: static-maker-deploy-extra.php:56
+msgid "Record Time"
+msgstr "デプロイ完了日時"
+
+#: static-maker-deploy-extra.php:57
+msgid "Reserve Time"
+msgstr "デプロイ予約日時"
+
+#: static-maker-deploy-extra.php:60
+msgid "Created"
+msgstr "作成日時"
+
+#: static-maker-deploy-extra.php:61
+msgid "Rsync Code"
+msgstr ""
+
+#: static-maker-deploy-extra.php:62
+msgid "Rsync Output"
+msgstr ""
+
+#~ msgid "failed to remove revision"
+#~ msgstr "リビジョンの削除に失敗しました"
+
+#~ msgid "the schedule is already reserved"
+#~ msgstr "すでに予約されています"

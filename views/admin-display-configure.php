@@ -8,7 +8,7 @@ $remote_user = $options ? $options['remote_user'] ?? '' : '';
 $remote_dir = $options ? $options['remote_dir'] ?? '' : '';
 $remote_ssh_key = $options ? $options['remote_ssh_key'] ?? '' : '';
 $deploy_notify_email = $options ? $options['deploy_notify_email'] ?? '' : '';
-
+$deploy_notify_email_subject = $options ? $options['deploy_notify_email_subject'] ?? '' : '';
 ?>
 <div class="wrap">
 
@@ -65,12 +65,23 @@ $deploy_notify_email = $options ? $options['deploy_notify_email'] ?? '' : '';
 				</td>
 			</tr>
 			<tr>
-				<th><?=__('Deploy Notification Email', STATIC_MAKER_DEPLOY_EXTRA)?></th>
+				<th><?=__('Notification Email', STATIC_MAKER_DEPLOY_EXTRA)?></th>
 				<td>
 					<label for="<?=STATIC_MAKER_DEPLOY_EXTRA . '-deploy-notify-email'?>">
 						<input type="text" id="<?=STATIC_MAKER_DEPLOY_EXTRA . '-deploy-notify-email'?>" class="large-text code"
 								  name="<?=STATIC_MAKER_DEPLOY_EXTRA . '[deploy_notify_email]'?>" placeholder="admin@example.com" value="<?=$deploy_notify_email?>">
 					</label>
+					<p><?=__('if you specify multiple emails, use comma to separate them', STATIC_MAKER_DEPLOY_EXTRA)?></p>
+				</td>
+			</tr>
+			<tr>
+				<th><?=__('Notification Subject', STATIC_MAKER_DEPLOY_EXTRA)?></th>
+				<td>
+					<label for="<?=STATIC_MAKER_DEPLOY_EXTRA . '-deploy-notify-email-subject'?>">
+						<input type="text" id="<?=STATIC_MAKER_DEPLOY_EXTRA . '-deploy-notify-email-subject'?>" class="large-text code"
+								  name="<?=STATIC_MAKER_DEPLOY_EXTRA . '[deploy_notify_email_subject]'?>" placeholder="" value="<?=$deploy_notify_email_subject?>">
+					</label>
+					<p><?=__('use %subject% to insert a predefined subject', STATIC_MAKER_DEPLOY_EXTRA)?></p>
 				</td>
 			</tr>
 		</table>
