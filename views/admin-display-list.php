@@ -7,7 +7,7 @@ $table = new Deploy_List_Table(new Path(), new File(), new DB());
 
 	<?php if ($this->option->is_configured()): ?>
 
-	<h1><?=__('Schedule List', STATIC_MAKER_DEPLOY_EXTRA)?></h3>
+	<h1><?=__('Schedule List', STATIC_MAKER_DEPLOY_EXTRA)?></h1>
 
 	<div class="wrap">
 		<h2 class="wp-heading-inline"><?=__('List', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
@@ -19,14 +19,14 @@ $table = new Deploy_List_Table(new Path(), new File(), new DB());
 	</div>
 
 	<h2 class="queue-list-title"><?=__('Queue List', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
-	<p><?=__('Now', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=date('Y-m-d H:i:s')?></p>
+	<p><?=__('Now', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=date_i18n('Y-m-d H:i:s')?></p>
 	<ul>
 		<?php if (!count($this->cron->get_cron_schedules())): ?>
 			<li><?=__('There is no waiting deploy', STATIC_MAKER_DEPLOY_EXTRA)?></li>
 		<?php endif?>
 		<?php foreach ($this->cron->get_cron_schedules() as $timestamp => $cron): ?>
 			<li>
-				<?=date('Y-m-d H:i:s', $timestamp)?>
+				<?=date_i18n('Y-m-d H:i:s', $timestamp)?>
 				<button class="button smde-unschedule-deploy" data-timestamp="<?=$timestamp?>">削除</button>
 			</li>
 		<?php endforeach?>

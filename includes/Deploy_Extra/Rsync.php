@@ -33,6 +33,7 @@ class Rsync
         fwrite($temp, $credential);
 
         $options = "-Parcvv --delete -e 'ssh -i $path -o StrictHostKeyChecking=no'";
+        $options = apply_filters( 'static_maker_deploy_extra_sync_options', $options, '', '' );
 
         if ($dry_run) {
             $options .= ' -n';
@@ -76,6 +77,7 @@ class Rsync
         fwrite($temp, $credential);
 
         $options = "-Parcvv --delete -e 'ssh -i $path -o StrictHostKeyChecking=no'";
+        $options = apply_filters( 'static_maker_deploy_extra_sync_options', $options, '', '' );
 
         if ($dry_run) {
             $options .= ' -n';

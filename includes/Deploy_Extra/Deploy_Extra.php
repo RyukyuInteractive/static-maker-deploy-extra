@@ -56,13 +56,14 @@ class Deploy_Extra
 
     public function menu($slug)
     {
-        $cap = 'manage_options';
+        $admin_cap = 'manage_options';
+        $editor_cap = 'edit_others_posts';
 
         add_submenu_page(
             $slug,
             __('Deploy', STATIC_MAKER_DEPLOY_EXTRA),
             __('Deploy', STATIC_MAKER_DEPLOY_EXTRA),
-            $cap,
+            $editor_cap,
             $slug . '_deploy_extra_main',
             [$this, 'display_admin_menu_main']
         );
@@ -71,7 +72,7 @@ class Deploy_Extra
             $slug,
             __('Deploy List', STATIC_MAKER_DEPLOY_EXTRA),
             __('Deploy List', STATIC_MAKER_DEPLOY_EXTRA),
-            $cap,
+            $editor_cap,
             $slug . '_deploy_extra_list',
             [$this, 'display_admin_menu_list']
         );
@@ -80,7 +81,7 @@ class Deploy_Extra
             $slug,
             __('Deploy Settings', STATIC_MAKER_DEPLOY_EXTRA),
             __('Deploy Settings', STATIC_MAKER_DEPLOY_EXTRA),
-            $cap,
+            $admin_cap,
             $slug . '_deploy_extra_configuration',
             [$this, 'display_admin_menu_configure']
         );

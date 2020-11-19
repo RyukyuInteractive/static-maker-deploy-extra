@@ -130,7 +130,15 @@ class Deploy_List_Table extends WP_List_Table
         $url = '//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
         $query = parse_url($url, PHP_URL_QUERY);
         $url .= $query ? '&deploy=' . $item['id'] : '?deploy_id=' . $item['id'];
-        return "<a href=\"$url\";>" . $item['date'] . '</a>';
+
+        if(get_option('timezone_string') == 'Asia/Tokyo'){
+            $timestamp = strtotime($item['date']) + (9 * 60 * 60);
+        } else {
+            $timestamp = strtotime($item['date']);
+        }
+        $date = date('Y/m/d H:i:s',$timestamp);
+
+        return "<a href=\"$url\";>" . $date . '</a>';
     }
 
     public function get_bulk_actions()

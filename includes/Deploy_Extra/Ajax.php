@@ -49,7 +49,15 @@ class Ajax
             wp_die(__('please set required parameters', STATIC_MAKER_DEPLOY_EXTRA), '', 422);
         }
 
-        $timestamp = strtotime($date . ' ' . $time);
+        if($now){
+           $timestamp = strtotime($date . ' ' . $time);
+        } else {
+           if(get_option('timezone_string') == 'Asia/Tokyo'){
+              $timestamp = strtotime($date . ' ' . $time) - (9 * 60 * 60);
+           } else {
+              $timestamp = strtotime($date . ' ' . $time);
+           }
+        }
 
         if (!$this->revision->make_revision_from_production($timestamp, $files)) {
             $this->log->error(__('ajax_partial_schedule_deploy: failed to create revision from production', STATIC_MAKER_DEPLOY_EXTRA, [
@@ -86,7 +94,15 @@ class Ajax
             wp_die(__('please set required parameters', STATIC_MAKER_DEPLOY_EXTRA), '', 422);
         }
 
-        $timestamp = strtotime($date . ' ' . $time);
+        if($now){
+            $timestamp = strtotime($date . ' ' . $time);
+        } else {
+            if(get_option('timezone_string') == 'Asia/Tokyo'){
+                $timestamp = strtotime($date . ' ' . $time) - (9 * 60 * 60);
+            } else {
+                $timestamp = strtotime($date . ' ' . $time);
+            }
+        }
 
         // accept one schedule at a time
         if (count($this->cron->get_cron_schedules()) > 0) {

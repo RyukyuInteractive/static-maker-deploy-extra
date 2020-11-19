@@ -10,6 +10,14 @@ $db = new DB();
 $deploy = $db->fetch_deploy($id);
 $table = new Deploy_Files_List_Table($db, $id);
 $table->prepare_items();
+
+
+if(get_option('timezone_string') == 'Asia/Tokyo'){
+    $timestamp = strtotime($deploy['date']) + (9 * 60 * 60);
+} else {
+    $timestamp = strtotime($deploy['date']);
+}
+$date = date('Y/m/d H:i:s',$timestamp);
 ?>
 
 <div id="smde-deploy">
@@ -17,7 +25,7 @@ $table->prepare_items();
 
     <div class="wrap">
         <h2 class="wp-heading-inline"><?=__('Deploy Info', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
-        <p><?=__('Date', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['date']?></p>
+        <p><?=__('Date', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$date?></p>
         <p><?=__('Timestamp', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['timestamp']?></p>
         <p><?=__('Deploy ID', STATIC_MAKER_DEPLOY_EXTRA)?>: <?=$deploy['id']?></p>
     </div>
