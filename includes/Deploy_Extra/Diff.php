@@ -59,10 +59,10 @@ class Diff
                 if (isset($prd_list[$rev_key])) {
                     $prd_file = $prd_list[$rev_key];
 
-                    $time_diff = $rev_file->getMTime() === $prd_file->getMTime();
+                    $time_diff = $rev_file->getMTime() > $prd_file->getMTime();
                     $size_diff = $rev_file->getSize() === $prd_file->getSize();
 
-                    if (!$time_diff || !$size_diff) {
+                    if ($time_diff || !$size_diff) {
                         array_push($diffs, [
                             'file_path' => $rev_key,
                             'action' => 'modified',

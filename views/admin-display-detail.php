@@ -34,11 +34,9 @@ $date = date('Y/m/d H:i:s',$timestamp);
     <div class="wrap">
         <h2 class="wp-heading-inline"><?=__('Files', STATIC_MAKER_DEPLOY_EXTRA)?></h2>
         <form method="post">
-            <?php $table->search_box('serach', 'search_id')?>
-            <?php $table->display()?>
+            <?php $table->display(false)?>
         </form>
     </div>
     <?php endif?>
 
-    <div class="smde-deploy-app" style="display: contents;"></div>
 </div>

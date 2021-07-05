@@ -25,14 +25,17 @@ class Rsync
         $user = $option['remote_user'];
         $dst = $option['remote_dir'];
         $credential = $crypto_util::decrypt($option['remote_ssh_key'], true);
+        $remote_ssh_key_path = $crypto_util::decrypt($option['remote_ssh_key_path'], true);
 
         $revision_path = $this->path->get_revision_path($timestamp);
 
-        $temp = tmpfile();
-        $path = stream_get_meta_data($temp)['uri'];
-        fwrite($temp, $credential);
+        if (!empty($credential)) {
+            $temp = tmpfile();
+            $remote_ssh_key_path = stream_get_meta_data($temp)['uri'];
+            fwrite($temp, $credential);
+        }
 
-        $options = "-Parcvv --delete -e 'ssh -i $path -o StrictHostKeyChecking=no'";
+        $options = "-Parcvv --delete -e 'ssh -i $remote_ssh_key_path -o StrictHostKeyChecking=no'";
         $options = apply_filters( 'static_maker_deploy_extra_sync_options', $options, '', '' );
 
         if ($dry_run) {
@@ -43,10 +46,9 @@ class Rsync
 
         exec($rsync_command, $out, $code);
 
-//        file_put_contents(ABSPATH . '/hoge', $rsync_command);
-        //        file_put_contents(ABSPATH . '/output', $output);
-
-        fclose($temp);
+        if(!empty($credential)) {
+            fclose($temp);
+        }
 
         return [
             'output' => $out,
@@ -62,6 +64,7 @@ class Rsync
         $user = $option['remote_user'];
         $dst = $option['remote_dir'];
         $credential = $crypto_util::decrypt($option['remote_ssh_key'], true);
+        $remote_ssh_key_path = $crypto_util::decrypt($option['remote_ssh_key_path'], true);
 
         $local_path = $this->path->get_local_production_path();
 
@@ -72,11 +75,13 @@ class Rsync
             $local_path = $this->path->get_local_production_path();
         }
 
-        $temp = tmpfile();
-        $path = stream_get_meta_data($temp)['uri'];
-        fwrite($temp, $credential);
+        if (!empty($credential)) {
+            $temp = tmpfile();
+            $remote_ssh_key_path = stream_get_meta_data($temp)['uri'];
+            fwrite($temp, $credential);
+        }
 
-        $options = "-Parcvv --delete -e 'ssh -i $path -o StrictHostKeyChecking=no'";
+        $options = "-Parcvv --delete -e 'ssh -i $remote_ssh_key_path -o StrictHostKeyChecking=no'";
         $options = apply_filters( 'static_maker_deploy_extra_sync_options', $options, '', '' );
 
         if ($dry_run) {
@@ -91,7 +96,9 @@ class Rsync
 
         exec($rsync_command, $out, $code);
 
-        fclose($temp);
+        if(!empty($credential)){
+            fclose($temp);
+        }
 
         return [
             'output' => $out,

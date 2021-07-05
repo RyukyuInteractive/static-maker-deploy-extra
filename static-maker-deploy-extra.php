@@ -85,7 +85,7 @@ function load_static_maker_deploy_extra_basics($static_maker_class)
 
     // cron actions
     add_action('smde_schedule_handler', [$smde->cron, 'cron_schedule_handler']);
-    // add_action('static_maker_dequeue', [$smde->cron, 'cron_schedule_handler']);
+    add_action('smde_remove_old_deploy_file', [$smde->cron, 'cron_remove_old_deploy_file_handler']);
 
     // ajax endpoints
     add_action('wp_ajax_static-maker-deploy-extra-schedule_deploy', [$smde->ajax, 'ajax_schedule_deploy']);
@@ -94,6 +94,10 @@ function load_static_maker_deploy_extra_basics($static_maker_class)
     add_action('wp_ajax_static-maker-deploy-extra-ajax_download_production_data', [$smde->ajax, 'ajax_download_production_data']);
     add_action('wp_ajax_static-maker-deploy-extra-ajax_get_current_diffs', [$smde->ajax, 'ajax_get_current_diffs']);
 
+    add_filter('cron_schedules', 'example_add_cron_interval');
+    if (wp_next_scheduled('smde_remove_old_deploy_file') == false) {
+        wp_schedule_event(time(), 'hourly', 'smde_remove_old_deploy_file');
+    }
 }
 
 // activation and deactivation hooks

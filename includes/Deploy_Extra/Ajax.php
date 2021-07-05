@@ -8,10 +8,12 @@ class Ajax
 {
     private $diff;
     private $rsync;
+    private $aws;
     private $cron;
     private $db;
     private $revision;
     private $log;
+    private $option;
 
     public function __construct(
         Diff $diff,
@@ -19,13 +21,17 @@ class Ajax
         Cron $cron,
         DB $db,
         Revision $revision,
+        Option $option,
+        AWS $aws,
         Logger $log
     ) {
         $this->diff = $diff;
         $this->rsync = $rsync;
+        $this->aws = $aws;
         $this->cron = $cron;
         $this->db = $db;
         $this->revision = $revision;
+        $this->option = $option;
         $this->log = $log;
     }
 
@@ -187,13 +193,25 @@ class Ajax
     {
         check_ajax_referer('download_production_data');
 
-        $ret = $this->rsync->download_production_data();
+        $option = $this->option->get_option();
+        $deploy_type = $option['deploy_type']?? '';
+
+        switch ($deploy_type){
+            case 's3':
+                $ret = $this->aws->s3_download_production_data();
+                break;
+            case 'rsync':
+            default:
+                $ret = $this->rsync->download_production_data();
+                break;
+        }
+        $output_data = [
+            $option['deploy_type'].'_code' => $ret['code'],
+            $option['deploy_type'].'_output' => $ret['output'],
+        ];
 
         if ($ret['code'] !== 0) {
-            $this->log->error(__('Rsync from production failed', STATIC_MAKER_DEPLOY_EXTRA), [
-                'rsync_code' => $ret['code'],
-                'rsync_output' => $ret['output'],
-            ]);
+            $this->log->error(__('Sync from production failed', STATIC_MAKER_DEPLOY_EXTRA), $output_data);
             wp_die(__('failed to download', STATIC_MAKER_DEPLOY_EXTRA), '', 500);
         }
 
@@ -205,14 +223,26 @@ class Ajax
     public function ajax_get_current_diffs()
     {
         check_ajax_referer('get_current_diffs');
+        $option = $this->option->get_option();
+        $deploy_type = $option['deploy_type']?? '';
 
-        $ret = $this->rsync->download_production_data();
+        switch ($deploy_type){
+            case 's3':
+                $ret = $this->aws->s3_download_production_data();
+                break;
+            case 'rsync':
+            default:
+                $ret = $this->rsync->download_production_data();
+                break;
+        }
+
+        $output_data = [
+            $option['deploy_type'].'_code' => $ret['code'],
+            $option['deploy_type'].'_output' => $ret['output'],
+        ];
 
         if ($ret['code'] !== 0) {
-            $this->log->error(__('Rsync from production failed', STATIC_MAKER_DEPLOY_EXTRA), [
-                'rsync_code' => $ret['code'],
-                'rsync_output' => $ret['output'],
-            ]);
+            $this->log->error(__('Sync from production failed', STATIC_MAKER_DEPLOY_EXTRA), $output_data);
             wp_die(__('failed to download', STATIC_MAKER_DEPLOY_EXTRA), '', 500);
         }
 

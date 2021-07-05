@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-11-26 14:50+0900\n"
-"PO-Revision-Date: 2018-11-26 14:53+0900\n"
+"PO-Revision-Date: 2021-01-20 14:17+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: includes/Deploy_Extra/Deploy_Extra.php:63
@@ -418,6 +418,15 @@ msgstr ""
 #: static-maker-deploy-extra.php:62
 msgid "Rsync Output"
 msgstr ""
+
+msgid "Deployment data retention period"
+msgstr "デプロイデータ保有期間"
+
+msgid "day"
+msgstr "日"
+
+msgid "Deploy User"
+msgstr "デプロイユーザ"
 
 #~ msgid "failed to remove revision"
 #~ msgstr "リビジョンの削除に失敗しました"

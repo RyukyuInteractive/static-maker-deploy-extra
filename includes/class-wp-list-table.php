@@ -466,7 +466,7 @@ class WP_List_Table
 
         echo '<label for="bulk-action-selector-' . esc_attr($which) . '" class="screen-reader-text">' . __('Select bulk action') . '</label>';
         echo '<select name="action' . $two . '" id="bulk-action-selector-' . esc_attr($which) . "\">\n";
-        echo '<option value="-1">' . __('Bulk Actions') . "</option>\n";
+        echo '<option value="-1">' . __('操作') . "</option>\n";
 
         foreach ($this->_actions as $name => $title) {
             $class = 'edit' === $name ? ' class="hide-if-no-js"' : '';
@@ -1139,11 +1139,13 @@ foreach ($this->modes as $mode => $title) {
      *
      * @since 3.1.0
      */
-    public function display()
+    public function display($navi = true)
     {
         $singular = $this->_args['singular'];
 
-        $this->display_tablenav('top');
+        if($navi){
+            $this->display_tablenav('top');
+        }
 
         $this->screen->render_screen_reader_content('heading_list');
         ?>
@@ -1169,7 +1171,9 @@ if ($singular) {
 
 </table>
 <?php
-$this->display_tablenav('bottom');
+        if($navi){
+            $this->display_tablenav('bottom');
+        }
     }
 
     /**

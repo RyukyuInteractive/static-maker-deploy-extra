@@ -63,7 +63,7 @@ class File
     public function copy_partial_files($src_base, $dst_base, $files)
     {
         foreach ($files as $file => $data) {
-            if ($data['status'] === 'deleted') {
+            if ($data['action'] === 'deleted') {
                 continue;
             }
             $src = realpath("$src_base/$file");
@@ -88,7 +88,7 @@ class File
     public function remove_partial_files($tgt_base, $files)
     {
         foreach ($files as $file => $data) {
-            if ($data['status'] !== 'deleted') {
+            if ($data['action'] !== 'deleted') {
                 continue;
             }
 

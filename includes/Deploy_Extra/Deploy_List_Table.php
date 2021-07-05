@@ -34,6 +34,7 @@ class Deploy_List_Table extends WP_List_Table
             'date' => __('Revision Date', STATIC_MAKER_DEPLOY_EXTRA),
             'created_at' => __('Created At', STATIC_MAKER_DEPLOY_EXTRA),
             'exists' => __('File Existance', STATIC_MAKER_DEPLOY_EXTRA),
+            'deploy_user' => __('Deploy User', STATIC_MAKER_DEPLOY_EXTRA),
             'type' => __('Type', STATIC_MAKER_DEPLOY_EXTRA),
             'status' => __('Status', STATIC_MAKER_DEPLOY_EXTRA),
         );
@@ -108,6 +109,9 @@ class Deploy_List_Table extends WP_List_Table
                     return __('deleted', STATIC_MAKER_DEPLOY_EXTRA);
                 }
                 return __($item[$column_name], STATIC_MAKER_DEPLOY_EXTRA);
+            case 'deploy_user':
+                $user = get_userdata($item[$column_name]);
+                return $user->user_login?? '';
             default:
                 return print_r($item, true); //Show the whole array for troubleshooting purposes
         }
@@ -144,7 +148,7 @@ class Deploy_List_Table extends WP_List_Table
     public function get_bulk_actions()
     {
         $actions = array(
-            'delete' => 'Delete',
+            'delete' => '履歴削除',
         );
         return $actions;
     }

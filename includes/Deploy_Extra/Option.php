@@ -34,7 +34,26 @@ class Option
     public function is_configured()
     {
         $opts = $this->get_option();
-        return $this->is_set($opts, 'remote_ssh_key') && $this->is_set($opts, 'remote_user') && $this->is_set($opts, 'remote_dir') && $this->is_set($opts, 'remote_host');
+
+        if (!empty($opts['deploy_type'])) {
+            switch ($opts['deploy_type']) {
+                case 'rsync':
+                    return ($this->is_set($opts, 'remote_ssh_key') || $this->is_set($opts, 'remote_ssh_key_path')) &&
+                        $this->is_set($opts, 'remote_user') &&
+                        $this->is_set($opts, 'remote_dir') &&
+                        $this->is_set($opts, 'remote_host');
+                case 's3':
+                    return $this->is_set($opts, 's3_bucket') &&
+                        $this->is_set($opts, 's3_bucket_source') &&
+                        getenv('AWS_ACCESS_KEY_ID', false) &&
+                        getenv('AWS_SECRET_ACCESS_KEY', false);
+                default:
+                    break;
+            }
+        }
+
+
+        return false;
     }
 
     private function is_set($opts, $key)

@@ -46,6 +46,7 @@ function _create_list_table()
 
     $sql = "CREATE TABLE $table_name (
 			  id int(20) NOT NULL AUTO_INCREMENT,
+			  deploy_user bigint(20) DEFAULT 0,
 			  date datetime,
 			  timestamp VARCHAR(30),
 			  type VARCHAR(30),

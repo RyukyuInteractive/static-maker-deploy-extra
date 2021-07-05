@@ -67,11 +67,11 @@ document.addEventListener('DOMContentLoaded', function() {
 		console.log(state)
 
 		return h('div', {}, [
-			components.Loader,
 			components.DeployTypeRadio,
 
 			wholeDeployContainer(state, actions),
-			partialDeployContainer(state, actions)
+			partialDeployContainer(state, actions),
+            components.Loader
 		])
 	}
 

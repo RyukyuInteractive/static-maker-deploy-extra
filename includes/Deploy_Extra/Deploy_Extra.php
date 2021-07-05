@@ -57,7 +57,7 @@ class Deploy_Extra
     public function menu($slug)
     {
         $admin_cap = 'manage_options';
-        $editor_cap = 'edit_others_posts';
+        $editor_cap = 'edit_posts';
 
         add_submenu_page(
             $slug,
@@ -124,7 +124,7 @@ class Deploy_Extra
         ]);
         wp_enqueue_script('smde_actions');
 
-        wp_enqueue_style('smde-common-style', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/css/common.css');
+        wp_enqueue_style('smde-common-style', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/css/common.css',[],'1.1');
 
         wp_localize_script('smde_actions', 'scheduleDeployData', [
             'action' => 'static-maker-deploy-extra-schedule_deploy',
@@ -138,7 +138,7 @@ class Deploy_Extra
         switch ($hook) {
             case 'static-maker_page_static-maker_deploy_extra_main':
 
-                wp_register_script('smde_deploy', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/deploy.js');
+                wp_register_script('smde_deploy', plugins_url('', STATIC_MAKER_DEPLOY_EXTRA_ENTRY_FILE) . '/res/js/deploy.js',[],'1.1');
                 wp_enqueue_script('smde_deploy');
 
                 wp_localize_script('smde_deploy', 'downloadProductionData', [
@@ -204,6 +204,11 @@ class Deploy_Extra
         if (isset($input['remote_ssh_key']) && !empty($input['remote_ssh_key'])) {
             $crypto_util = $this->static_maker->crypto_util;
             $input['remote_ssh_key'] = $crypto_util::encrypt($input['remote_ssh_key'], true);
+        }
+
+        if (isset($input['remote_ssh_key_path']) && !empty($input['remote_ssh_key_path'])) {
+            $crypto_util = $this->static_maker->crypto_util;
+            $input['remote_ssh_key_path'] = $crypto_util::encrypt($input['remote_ssh_key_path'], true);
         }
 
         return $input;

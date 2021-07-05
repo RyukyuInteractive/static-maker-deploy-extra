@@ -53,6 +53,14 @@ class DB
         return $wpdb->update($table, ['status' => $status], ['id' => $id]) === 1;
     }
 
+    public function update_deleted($id, $deleted_status)
+    {
+        global $wpdb;
+
+        $table = $this->get_list_table_name();
+        return $wpdb->update($table, ['deleted' => $deleted_status], ['id' => $id]) === 1;
+    }
+
     public function update_status_by_timestamp($timestamp, $status)
     {
         global $wpdb;
@@ -160,7 +168,7 @@ class DB
             }
         }
 
-        $query = 'SELECT * FROM ' . $this->get_list_table_name() . ' WHERE deleted = 0 ';
+        $query = 'SELECT * FROM ' . $this->get_list_table_name() . ' WHERE deleted = 0 OR deleted = 2 ';
         if ($search_queries) {
             $query .= ' AND (' . implode(' OR ', $search_queries) . ')';
         }
@@ -209,5 +217,15 @@ class DB
 
         $sql = "UPDATE $table SET deleted = 1 WHERE id in (" . implode(', ', $place_holders) . ')';
         return $wpdb->query($wpdb->prepare($sql, $ids));
+    }
+
+    public function get_remove_deploy_file_list($delet_date){
+        global $wpdb;
+        $table = $this->get_list_table_name();
+
+        $query = "SELECT id, timestamp FROM {$table} WHERE deleted = 0 AND date <= '%s' AND (status = 'completed' OR status = 'failed') LIMIT 5";
+        $query = $wpdb->prepare($query, $delet_date);
+
+        return $wpdb->get_results($query, ARRAY_A);
     }
 }
