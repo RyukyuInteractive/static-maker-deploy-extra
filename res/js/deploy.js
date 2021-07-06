@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		console.log(state)
 
 		return h('div', {}, [
+			components.ClearAllCacheButton,
 			components.DeployTypeRadio,
 
 			wholeDeployContainer(state, actions),

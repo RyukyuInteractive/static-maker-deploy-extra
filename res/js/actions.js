@@ -102,6 +102,32 @@
 			checkedFiles: state.checkedFiles.delete(filePath)
 		}),
 
-		setPartialView: partialView => state => ({ partialView })
+		setPartialView: partialView => state => ({ partialView }),
+
+		clearAllCache: () => (state, actions) =>
+			new Promise((resolve, reject) => {
+				const requestData = clearAllCache
+
+				if (state.processing) {
+					return
+				}
+
+				actions.setProcessing(true)
+
+				jQuery
+					.post(requestData.url, {
+						action: requestData.action
+					})
+					.done(e => {
+						actions.setProcessing(false)
+						alert(getMessage('ajax_clear_all_cache: succeeded'))
+						resolve(state)
+					})
+					.fail(function() {
+						actions.setProcessing(false)
+						alert(getMessage(getMessage('ajax_clear_all_cache: failed')))
+						reject(new Error('clear cache failed'))
+					})
+			}),
 	}
 })()

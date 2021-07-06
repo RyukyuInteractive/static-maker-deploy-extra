@@ -93,6 +93,7 @@ function load_static_maker_deploy_extra_basics($static_maker_class)
     add_action('wp_ajax_static-maker-deploy-extra-unschedule_deploy', [$smde->ajax, 'ajax_unschedule_deploy']);
     add_action('wp_ajax_static-maker-deploy-extra-ajax_download_production_data', [$smde->ajax, 'ajax_download_production_data']);
     add_action('wp_ajax_static-maker-deploy-extra-ajax_get_current_diffs', [$smde->ajax, 'ajax_get_current_diffs']);
+    add_action('wp_ajax_static-maker-deploy-extra-ajax_clear_all_cache', [$smde->ajax, 'ajax_clear_all_cache']);
 
     add_filter('cron_schedules', 'example_add_cron_interval');
     if (wp_next_scheduled('smde_remove_old_deploy_file') == false) {

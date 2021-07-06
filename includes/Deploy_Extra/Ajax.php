@@ -252,4 +252,19 @@ class Ajax
 
         wp_die();
     }
+
+    public function ajax_clear_all_cache()
+    {
+        check_ajax_referer('clear_all_cache');
+        $result = $this->aws->clear_cloudfront_cache("'/*'");
+
+        if ($result['code'] !== 0) {
+            $this->log->error(__('ajax_clear_all_cache: failed', STATIC_MAKER_DEPLOY_EXTRA), $result);
+            wp_die(__('ajax_clear_all_cache: failed', STATIC_MAKER_DEPLOY_EXTRA), '', 500);
+        }
+
+        $this->log->info(__('ajax_clear_all_cache: succeeded', STATIC_MAKER_DEPLOY_EXTRA));
+
+        wp_die();
+    }
 }

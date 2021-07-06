@@ -11,6 +11,7 @@ class AWS
     private $bucket;
     private $region;
     private $s3_sync_option;
+    private $distribution_id;
 
     public function __construct(File $file, Path $path, Option $option)
     {
@@ -22,6 +23,7 @@ class AWS
         $this->region = $option['s3_region'];
         $this->bucket = 's3://' . $option['s3_bucket'];
         $this->s3_sync_option = $option['s3_sync_option'];
+        $this->distribution_id = $option['distribution_id'];
 
         //set aws cli config
         putenv("AWS_DEFAULT_REGION=" . $this->region);
@@ -66,6 +68,31 @@ class AWS
 
         $option = $this->s3_sync_option;
         $aws_cli_command = "aws s3 sync {$option} --exact-timestamps --delete {$this->bucket} {$local_path} 2>&1";
+        exec($aws_cli_command, $out, $code);
+
+        return [
+            'output' => $out,
+            'code' => $code,
+        ];
+    }
+
+    /**
+     * S3のbucket名を取得
+     *
+     * @return string
+     */
+    public function get_bucket() {
+        return $this->bucket;
+    }
+
+    /**
+     * 指定するファイルパス、CloudFrontのキャッシュをAWS CLIで削除する
+     *
+     * @param $path
+     * @return array|false
+     */
+    public function clear_cloudfront_cache($path) {
+        $aws_cli_command = "aws cloudfront create-invalidation --distribution-id {$this->distribution_id} --paths {$path}";
         exec($aws_cli_command, $out, $code);
 
         return [

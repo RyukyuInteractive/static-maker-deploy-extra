@@ -121,6 +121,9 @@ class Deploy_Extra
             'Missing Required Arguments' => __('Missing Required Arguments', STATIC_MAKER_DEPLOY_EXTRA),
             'The new deployment has been reserved' => __('The new deployment has been reserved', STATIC_MAKER_DEPLOY_EXTRA),
             'The production is latest' => __('The production is latest', STATIC_MAKER_DEPLOY_EXTRA),
+            'Clear all cache' => __('Clear all cache', STATIC_MAKER_DEPLOY_EXTRA),
+            'ajax_clear_all_cache: failed' => __('ajax_clear_all_cache: failed', STATIC_MAKER_DEPLOY_EXTRA),
+            'ajax_clear_all_cache: succeeded' => __('ajax_clear_all_cache: succeeded', STATIC_MAKER_DEPLOY_EXTRA),
         ]);
         wp_enqueue_script('smde_actions');
 
@@ -148,6 +151,10 @@ class Deploy_Extra
                 wp_localize_script('smde_deploy', 'getCurrentDiffsData', [
                     'action' => 'static-maker-deploy-extra-ajax_get_current_diffs',
                     'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'get_current_diffs'),
+                ]);
+                wp_localize_script('smde_deploy', 'clearAllCache', [
+                    'action' => 'static-maker-deploy-extra-ajax_clear_all_cache',
+                    'url' => wp_nonce_url(admin_url('admin-ajax.php'), 'clear_all_cache'),
                 ]);
 
                 break;
