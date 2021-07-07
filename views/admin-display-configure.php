@@ -17,6 +17,8 @@ $s3_region = $options ? $options['s3_region'] ?? '' : '';
 $s3_bucket_source = $options ? $options['s3_bucket_source'] ?? '' : '';
 $s3_sync_option = $options ? $options['s3_sync_option'] ?? '' : '';
 $deploy_type = $options ? $options['deploy_type'] ?? '' : '';
+$is_clear_cache = $options ? $options['is_clear_cache'] ?? '' : 1;
+$distribution_id = $options ? $options['distribution_id'] ?? '' : '';
 ?>
 <div class="wrap">
 
@@ -174,6 +176,34 @@ $deploy_type = $options ? $options['deploy_type'] ?? '' : '';
                                name="<?=STATIC_MAKER_DEPLOY_EXTRA . '[deploy_data_delete_days]'?>" placeholder="" value="<?=esc_html($deploy_data_delete_days);?>">
                         <?=__('day', STATIC_MAKER_DEPLOY_EXTRA)?>
                     </label>
+                </td>
+            </tr>
+        </table>
+
+        <h3><?=__('[CloudFront]', STATIC_MAKER_DEPLOY_EXTRA)?></h3>
+        <table class="form-table">
+            <tr>
+                <th scope="row">
+                    <label for="<?=STATIC_MAKER_DEPLOY_EXTRA . '-is-clear-cache'?>">
+                        <?=__('Is clear cache', STATIC_MAKER_DEPLOY_EXTRA)?>
+                    </label>
+                </th>
+                <td>
+                    <label style="padding-right: 10px">
+                        <input type="checkbox" id="<?=STATIC_MAKER_DEPLOY_EXTRA . '-is-clear-cache'?>" name="<?=STATIC_MAKER_DEPLOY_EXTRA?>[is_clear_cache]" value="1" <?php checked($is_clear_cache, 1)?>>
+                        <?php _e('Clear cache', STATIC_MAKER_DEPLOY_EXTRA)?>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="<?=STATIC_MAKER_DEPLOY_EXTRA . '-distribution-id'?>">
+                        <?=__('Distribution ID', STATIC_MAKER_DEPLOY_EXTRA)?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text" id="<?=STATIC_MAKER_DEPLOY_EXTRA . '-distribution-id'?>" class="regular-text code"
+                           name="<?=STATIC_MAKER_DEPLOY_EXTRA . '[distribution_id]'?>" placeholder="" value="<?=esc_html($distribution_id)?>">
                 </td>
             </tr>
         </table>

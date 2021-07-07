@@ -207,7 +207,22 @@ window.addEventListener('load', function() {})
 					getMessage('Back')
 				)
 			])
-		}
+		},
+		ClearAllCacheButton: () => (state, actions) => {
+			const clearAllCache = actions.clearAllCache
+			return h(
+				'button',
+				{
+					style: 'margin: 1.5em 0;',
+					class: 'button button-primary',
+					onclick: e => {
+						e.preventDefault()
+						clearAllCache();
+					}
+				},
+				getMessage('Clear all cache')
+			)
+		},
 	}
 
 	window.smdeComponents = components

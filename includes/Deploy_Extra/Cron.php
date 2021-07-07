@@ -63,6 +63,19 @@ class Cron
             } else {
                 $this->db->update_status($deploy, 'completed');
                 $this->log->notice(__('deployed', STATIC_MAKER_DEPLOY_EXTRA), $output_data);
+                if ($this->option['is_clear_cache']) {
+                    //デプロイしたファイルパスを取得
+                    $files_path = implode(' ', array_map(function($output) {
+                        return '"' . end(explode($this->aws->get_bucket(), $output)) . '"';
+                    }, $ret['output']));
+
+                    $result = $this->aws->clear_cloudfront_cache($files_path);
+                    if ($result['code'] !== 0) {
+                        $this->log->error(__('Clear cache error', STATIC_MAKER_DEPLOY_EXTRA), $result['output']);
+                    } else {
+                        $this->log->notice(__('Clear cache success', STATIC_MAKER_DEPLOY_EXTRA), $result['output']);
+                    }
+                }
             }
         } else {
             $this->log->warning(__('not set deploy type'), $deploy);
